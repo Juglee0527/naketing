@@ -1,28 +1,46 @@
+// app/page.tsx
+import Link from "next/link";
+
 export default function Home() {
   return (
-      <main className="min-h-screen bg-zinc-950 text-white flex flex-col items-center justify-center px-6">
-        <div className="max-w-2xl text-center space-y-6">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            나를 표현하는 기술, <span className="text-violet-400">나케팅</span>
-          </h1>
+      // main이 flex 컨테이너이기 때문에 m-auto 한 줄로
+      // 가로/세로 둘 다 가운데 정렬됩니다.
+      <div className="m-auto max-w-2xl px-4 text-center space-y-6">
+        <p className="inline-flex items-center gap-2 rounded-full border border-violet-500/40 bg-violet-500/10 px-4 py-1 text-xs text-violet-200">
+          <span className="h-2 w-2 rounded-full bg-emerald-400" />
+          AI 기반 말하기 & 퍼스널 브랜딩 코치
+        </p>
 
-          <p className="text-zinc-300 leading-relaxed text-base md:text-lg">
-            AI 시대, 말하기는 새로운 경쟁력입니다.
-            나케팅은 당신의 <span className="text-violet-300">말하기 능력</span>과
-            <span className="text-violet-300">브랜딩 역량</span>을
-            AI 기반으로 성장시키는 개인 브랜딩 플랫폼입니다.
-          </p>
+        <h1 className="text-3xl md:text-5xl font-bold tracking-tight">
+          말을 바꾸면
+          <br />
+          <span className="text-violet-400">나를 바꿀 수 있습니다.</span>
+        </h1>
 
-          <div className="flex gap-4 justify-center pt-4">
-            <button className="px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 font-medium text-sm md:text-base">
-              시작하기 (Coming Soon)
-            </button>
+        <p className="text-sm md:text-base text-zinc-300 leading-relaxed">
+          나케팅은 말하기·표현력·브랜딩 역량을 AI로 분석하고 코칭하는
+          서비스입니다.{" "}
+          <span className="text-violet-300">
+          “나를 어떻게 설명할 것인가”
+        </span>
+          에 집중하여, 개발자 이정근이 직접 설계하고 만드는 플랫폼입니다.
+        </p>
 
-            <button className="px-6 py-3 rounded-xl border border-zinc-700 text-zinc-300 hover:bg-zinc-900 font-medium text-sm md:text-base">
-              나케팅 소개 보기
-            </button>
-          </div>
+        <div className="flex justify-center gap-4 pt-2">
+          <Link
+              href="/start"
+              className="rounded-xl bg-violet-600 px-6 py-3 text-sm md:text-base font-medium text-white hover:bg-violet-700"
+          >
+            시작하기
+          </Link>
+
+          <Link
+              href="/program"
+              className="rounded-xl border border-zinc-700 px-6 py-3 text-sm md:text-base text-zinc-200 hover:bg-zinc-900"
+          >
+            나케팅 소개 보기
+          </Link>
         </div>
-      </main>
+      </div>
   );
 }
