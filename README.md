@@ -1,6 +1,6 @@
 # 🟣 Naketing — 나를 마케팅하다
 
-**🔗 [https://naketing.co.kr](https://naketing.co.kr)**
+**🔗 https://www.naketing.co.kr/**
 
 > **나 자신을 설명하는 능력은 AI 시대의 새로운 경쟁력이다.
 > 말(언어)·브랜딩·표현력, 이제 누구나 스스로를 ‘브랜드’로 만든다.**
