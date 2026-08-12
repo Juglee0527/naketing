@@ -2,44 +2,13 @@
 
 import { useState } from "react";
 
-type SpeechPace = "slow" | "normal" | "fast";
-
-interface PaceDefinition {
-  label: string;
-  charactersPerMinute: number;
-}
-
-interface SpeechTimeResult {
-  characterCount: number;
-  wordCount: number;
-  totalSeconds: number;
-}
-
-const paceDefinitions: Record<SpeechPace, PaceDefinition> = {
-  slow: { label: "느리게", charactersPerMinute: 240 },
-  normal: { label: "보통", charactersPerMinute: 300 },
-  fast: { label: "빠르게", charactersPerMinute: 360 },
-};
-
-function countCharacters(value: string): number {
-  return Array.from(value.replace(/\s/g, "")).length;
-}
-
-function countWords(value: string): number {
-  const normalizedValue = value.trim();
-  return normalizedValue ? normalizedValue.split(/\s+/).length : 0;
-}
-
-function formatDuration(totalSeconds: number): string {
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-
-  if (minutes === 0) {
-    return `${seconds}초`;
-  }
-
-  return seconds === 0 ? `${minutes}분` : `${minutes}분 ${seconds}초`;
-}
+import {
+  calculateSpeechTime as calculateSpeechTimeValue,
+  formatSpeechDuration,
+  paceDefinitions,
+  type SpeechPace,
+  type SpeechTimeResult,
+} from "@/lib/speech-time";
 
 export function SpeechTimeCalculator() {
   const [script, setScript] = useState("");
@@ -50,22 +19,15 @@ export function SpeechTimeCalculator() {
 
   function calculateSpeechTime() {
     setMessage("");
-    const characterCount = countCharacters(script);
+    const calculatedResult = calculateSpeechTimeValue(script, pace);
 
-    if (characterCount === 0) {
+    if (!calculatedResult) {
       setResult(null);
       setError("계산할 원고를 입력해 주세요.");
       return;
     }
 
-    const { charactersPerMinute } = paceDefinitions[pace];
-    const totalSeconds = Math.max(1, Math.round((characterCount / charactersPerMinute) * 60));
-
-    setResult({
-      characterCount,
-      wordCount: countWords(script),
-      totalSeconds,
-    });
+    setResult(calculatedResult);
     setError("");
   }
 
@@ -77,7 +39,7 @@ export function SpeechTimeCalculator() {
 
     const paceDefinition = paceDefinitions[pace];
     const output = [
-      `예상 말하기 시간: ${formatDuration(result.totalSeconds)}`,
+      `예상 말하기 시간: ${formatSpeechDuration(result.totalSeconds)}`,
       `공백 제외 글자 수: ${result.characterCount}자`,
       `단어 수: ${result.wordCount}개`,
       `계산 기준: 분당 ${paceDefinition.charactersPerMinute}자 (${paceDefinition.label})`,
@@ -176,7 +138,7 @@ export function SpeechTimeCalculator() {
       {result && (
         <section className="rounded-xl border border-violet-500/40 bg-violet-500/10 p-5" aria-label="계산 결과">
           <p className="text-sm text-violet-200">예상 말하기 시간</p>
-          <p className="mt-2 text-3xl font-bold text-white">{formatDuration(result.totalSeconds)}</p>
+          <p className="mt-2 text-3xl font-bold text-white">{formatSpeechDuration(result.totalSeconds)}</p>
           <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-3">
             <div>
               <dt className="text-zinc-500">공백 제외 글자 수</dt>

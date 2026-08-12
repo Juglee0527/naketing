@@ -135,7 +135,7 @@ Guide를 추가할 때는 `title`, `description`, 실제 `YYYY-MM-DD` 날짜, �
 ### 3. Naketing 무료 Tools
 
 - Tool 목록과 상세 route는 `frontend` 안에서 관리합니다.
-- 현재 `/tools/speech-time-calculator`가 구현돼 있습니다.
+- 현재 `/tools/speech-time-calculator`와 `/tools/introduction-length-checker`가 구현돼 있습니다.
 - 서버가 필요 없는 입력과 변환은 브라우저 내부에서 처리합니다.
 - 규칙 기반 결과를 AI 분석이라고 표시하지 않습니다.
 - 정상, 빈값, 잘못된 입력, 경계값, Clear와 모바일 레이아웃을 확인합니다.

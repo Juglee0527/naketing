@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { IntroductionLengthChecker } from "@/components/introduction-length-checker";
 import { SpeechTimeCalculator } from "@/components/speech-time-calculator";
 import { getTool, tools, type ToolSlug } from "@/lib/tools";
 
@@ -19,6 +20,8 @@ function renderTool(toolSlug: ToolSlug) {
   switch (toolSlug) {
     case "speech-time-calculator":
       return <SpeechTimeCalculator />;
+    case "introduction-length-checker":
+      return <IntroductionLengthChecker />;
   }
 }
 
