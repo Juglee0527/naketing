@@ -30,7 +30,7 @@ naketing/
 
 2026-08-12 기준 두 앱은 다음 버전을 사용합니다.
 
-- Next.js 16.0.3
+- Next.js 16.3.0
 - React 19.2.0
 - TypeScript 5
 - Tailwind CSS 4

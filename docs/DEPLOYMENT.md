@@ -74,6 +74,18 @@ Invoke-WebRequest -UseBasicParsing https://dev.naketing.co.kr/robots.txt
 - Git push 후 Developer Site Project에 새 production deployment가 생성됩니다.
 - 배포가 확인된 뒤 Search Console 등록과 sitemap 제출을 진행합니다.
 
+## 배포 실패 대응
+
+Vercel은 알려진 중대 취약점이 있는 Next.js 버전의 신규 배포를 차단할 수 있습니다. Deploy Logs에 취약 버전 경고가 나오면 Vercel 설정을 우회하지 않고 다음 순서로 처리합니다.
+
+1. Next.js 공식 보안 권고에서 현재 패치 버전을 확인합니다.
+2. `next`와 `eslint-config-next`를 같은 버전으로 갱신합니다.
+3. `package-lock.json`을 함께 커밋합니다.
+4. 두 앱의 lint와 production build를 실행합니다.
+5. 검증된 커밋을 push해 Vercel 자동 재배포를 확인합니다.
+
+`npm audit fix --force`로 의존성을 일괄 변경하거나 Vercel의 보안 차단을 우회하지 않습니다.
+
 ## 외부 설정 변경 원칙
 
 Vercel Project 생성, custom domain 연결, DNS 변경은 계정과 운영 트래픽에 영향을 주는 외부 작업입니다. Codex는 사용자 승인과 해당 계정 접근 수단 없이 완료됐다고 표현하지 않습니다.
