@@ -7,6 +7,7 @@ import {
   applyIntroductionDraft,
   type IntroductionDraftAnswers,
 } from "@/lib/introduction-draft";
+import { compareIntroductionResults } from "@/lib/introduction-comparison";
 import {
   analyzeIntroduction,
   type IntroductionAnalysisResult,
@@ -79,6 +80,8 @@ export function IntroductionProgram() {
   const [script, setScript] = useState("");
   const [draftAnswers, setDraftAnswers] = useState<IntroductionDraftAnswers>(emptyDraftAnswers);
   const [result, setResult] = useState<IntroductionAnalysisResult | null>(null);
+  const [baselineResult, setBaselineResult] = useState<IntroductionAnalysisResult | null>(null);
+  const [analysisCount, setAnalysisCount] = useState(0);
   const [error, setError] = useState("");
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
 
@@ -99,6 +102,8 @@ export function IntroductionProgram() {
     }
 
     setResult(analyzedResult);
+    setBaselineResult((current) => current ?? analyzedResult);
+    setAnalysisCount((current) => current + 1);
     setError("");
     setStep(3);
   }
@@ -135,6 +140,8 @@ export function IntroductionProgram() {
     setScript("");
     setDraftAnswers(emptyDraftAnswers);
     setResult(null);
+    setBaselineResult(null);
+    setAnalysisCount(0);
     setError("");
   }
 
@@ -417,6 +424,11 @@ export function IntroductionProgram() {
             </h2>
 
             <IntroductionProgramResult
+              comparison={
+                analysisCount > 1 && baselineResult
+                  ? compareIntroductionResults(baselineResult, result)
+                  : null
+              }
               result={result}
               script={script}
               targetLabel={targetLabels[targetSeconds]}

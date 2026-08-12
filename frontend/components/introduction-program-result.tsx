@@ -8,14 +8,23 @@ import {
   type LengthStatus,
   type PhraseFinding,
 } from "@/lib/introduction-analysis";
+import type { IntroductionComparison } from "@/lib/introduction-comparison";
 import { formatSpeechDuration } from "@/lib/speech-time";
 
 interface IntroductionProgramResultProps {
+  comparison: IntroductionComparison | null;
   result: IntroductionAnalysisResult;
   script: string;
   targetLabel: string;
   onEdit: () => void;
   onReset: () => void;
+}
+
+interface ComparisonMetricProps {
+  label: string;
+  difference: number;
+  unit: string;
+  lowerIsBetter?: boolean;
 }
 
 interface HighlightRange {
@@ -81,7 +90,27 @@ function renderHighlightedScript(script: string, findings: PhraseFinding[]): Rea
   return blocks;
 }
 
+function ComparisonMetric({ label, difference, unit, lowerIsBetter = false }: ComparisonMetricProps) {
+  const isImproved = lowerIsBetter && difference < 0;
+  const isWorse = lowerIsBetter && difference > 0;
+  const differenceLabel = difference === 0 ? "변화 없음" : `${difference > 0 ? "+" : ""}${difference}${unit}`;
+
+  return (
+    <div className="rounded-xl border border-zinc-800 bg-zinc-950/60 p-4">
+      <p className="text-xs text-zinc-500">{label}</p>
+      <p
+        className={`mt-2 text-lg font-semibold ${
+          isImproved ? "text-emerald-300" : isWorse ? "text-amber-300" : "text-zinc-200"
+        }`}
+      >
+        {differenceLabel}
+      </p>
+    </div>
+  );
+}
+
 export function IntroductionProgramResult({
+  comparison,
   result,
   script,
   targetLabel,
@@ -150,6 +179,42 @@ export function IntroductionProgramResult({
           <dd className="mt-2 text-xl font-semibold">{result.averageSentenceCharacters}자</dd>
         </div>
       </dl>
+
+      {comparison && (
+        <section className="mt-8" aria-labelledby="revision-comparison-heading">
+          <p className="text-xs font-semibold text-emerald-300">첫 점검과 비교</p>
+          <h3 className="mt-2 text-lg font-semibold" id="revision-comparison-heading">
+            수정 후 달라진 내용
+          </h3>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <ComparisonMetric label="공백 제외 글자 수" difference={comparison.characterDifference} unit="자" />
+            <ComparisonMetric label="예상 말하기 시간" difference={comparison.durationDifference} unit="초" />
+            <ComparisonMetric label="점검 후보 표현" difference={comparison.fillerDifference} unit="곳" lowerIsBetter />
+            <ComparisonMetric label="55자 이상 문장" difference={comparison.longSentenceDifference} unit="개" lowerIsBetter />
+          </div>
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4">
+              <p className="text-xs text-emerald-300">새로 확인된 구조</p>
+              <p className="mt-2 text-sm text-zinc-300">
+                {comparison.resolvedStructureLabels.length > 0
+                  ? comparison.resolvedStructureLabels.join(", ")
+                  : "변화 없음"}
+              </p>
+            </div>
+            <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-4">
+              <p className="text-xs text-amber-300">수정 후 사라진 구조 단서</p>
+              <p className="mt-2 text-sm text-zinc-300">
+                {comparison.newlyMissingStructureLabels.length > 0
+                  ? comparison.newlyMissingStructureLabels.join(", ")
+                  : "없음"}
+              </p>
+            </div>
+          </div>
+          <p className="mt-3 text-xs leading-5 text-zinc-500">
+            비교 기준은 이 브라우저 세션에서 처음 점검한 원고입니다. 종합 점수나 전달력 평가는 제공하지 않습니다.
+          </p>
+        </section>
+      )}
 
       <section className="mt-8" aria-labelledby="expression-review-heading">
         <h3 className="text-lg font-semibold" id="expression-review-heading">
