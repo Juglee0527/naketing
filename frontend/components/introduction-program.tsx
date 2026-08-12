@@ -4,6 +4,10 @@ import { useEffect, useRef, useState } from "react";
 
 import { IntroductionProgramResult } from "@/components/introduction-program-result";
 import {
+  applyIntroductionDraft,
+  type IntroductionDraftAnswers,
+} from "@/lib/introduction-draft";
+import {
   analyzeIntroduction,
   type IntroductionAnalysisResult,
   type TargetDuration,
@@ -59,6 +63,13 @@ const targetLabels: Record<TargetDuration, string> = {
   180: "3분",
 };
 
+const emptyDraftAnswers: IntroductionDraftAnswers = {
+  identity: "",
+  situation: "",
+  focus: "",
+  closing: "",
+};
+
 export function IntroductionProgram() {
   const [step, setStep] = useState<ProgramStep>(1);
   const [situation, setSituation] = useState<IntroductionSituation>("interview");
@@ -66,6 +77,7 @@ export function IntroductionProgram() {
   const [targetSeconds, setTargetSeconds] = useState<TargetDuration>(60);
   const [pace, setPace] = useState<SpeechPace>("normal");
   const [script, setScript] = useState("");
+  const [draftAnswers, setDraftAnswers] = useState<IntroductionDraftAnswers>(emptyDraftAnswers);
   const [result, setResult] = useState<IntroductionAnalysisResult | null>(null);
   const [error, setError] = useState("");
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
@@ -91,6 +103,29 @@ export function IntroductionProgram() {
     setStep(3);
   }
 
+  function updateDraftAnswer(field: keyof IntroductionDraftAnswers, value: string) {
+    setDraftAnswers((current) => ({ ...current, [field]: value }));
+    setError("");
+  }
+
+  function createDraftFromAnswers() {
+    const application = applyIntroductionDraft(script, draftAnswers);
+
+    if (application.status === "existing-script") {
+      setError("기존 원고를 보호하기 위해 자동으로 덮어쓰지 않았습니다. 원고를 비운 뒤 다시 시도해 주세요.");
+      return;
+    }
+
+    if (application.status === "empty-draft") {
+      setError("작성 도우미의 질문에 한 가지 이상 답해 주세요.");
+      return;
+    }
+
+    setScript(application.script);
+    setResult(null);
+    setError("");
+  }
+
   function resetProgram() {
     setStep(1);
     setSituation("interview");
@@ -98,6 +133,7 @@ export function IntroductionProgram() {
     setTargetSeconds(60);
     setPace("normal");
     setScript("");
+    setDraftAnswers(emptyDraftAnswers);
     setResult(null);
     setError("");
   }
@@ -234,6 +270,69 @@ export function IntroductionProgram() {
                 <li>• 마지막에 상대가 기억해야 할 한 문장은 무엇인가요?</li>
               </ul>
             </div>
+
+            <section className="mt-6 rounded-xl border border-zinc-800 bg-zinc-950/40 p-5" aria-labelledby="draft-helper-heading">
+              <p className="text-xs font-semibold text-emerald-300">선택 기능</p>
+              <h3 className="mt-2 text-lg font-semibold" id="draft-helper-heading">
+                질문별 작성 도우미
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-zinc-400">
+                답할 수 있는 항목만 작성해도 입력 순서대로 하나의 원고로 연결합니다. 이미 작성한 원고는 자동으로 덮어쓰지 않습니다.
+              </p>
+              <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                <label className="block" htmlFor="draft-identity">
+                  <span className="text-sm font-semibold text-zinc-200">나의 역할</span>
+                  <textarea
+                    id="draft-identity"
+                    className="mt-2 min-h-28 w-full resize-y rounded-xl border border-zinc-700 bg-zinc-950 p-3 text-sm leading-6 text-zinc-100 placeholder:text-zinc-600 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
+                    value={draftAnswers.identity}
+                    onChange={(event) => updateDraftAnswer("identity", event.target.value)}
+                    placeholder="예: 저는 복잡한 업무를 정리하는 웹 개발자입니다."
+                    maxLength={500}
+                  />
+                </label>
+                <label className="block" htmlFor="draft-situation">
+                  <span className="text-sm font-semibold text-zinc-200">{situationDefinitions[situation].prompt}</span>
+                  <textarea
+                    id="draft-situation"
+                    className="mt-2 min-h-28 w-full resize-y rounded-xl border border-zinc-700 bg-zinc-950 p-3 text-sm leading-6 text-zinc-100 placeholder:text-zinc-600 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
+                    value={draftAnswers.situation}
+                    onChange={(event) => updateDraftAnswer("situation", event.target.value)}
+                    placeholder="상황과 직접 한 행동을 적어보세요."
+                    maxLength={500}
+                  />
+                </label>
+                <label className="block" htmlFor="draft-focus">
+                  <span className="text-sm font-semibold text-zinc-200">{focusDefinitions[focus].prompt}</span>
+                  <textarea
+                    id="draft-focus"
+                    className="mt-2 min-h-28 w-full resize-y rounded-xl border border-zinc-700 bg-zinc-950 p-3 text-sm leading-6 text-zinc-100 placeholder:text-zinc-600 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
+                    value={draftAnswers.focus}
+                    onChange={(event) => updateDraftAnswer("focus", event.target.value)}
+                    placeholder="강조할 근거를 구체적으로 적어보세요."
+                    maxLength={500}
+                  />
+                </label>
+                <label className="block" htmlFor="draft-closing">
+                  <span className="text-sm font-semibold text-zinc-200">마지막에 기억할 한 문장</span>
+                  <textarea
+                    id="draft-closing"
+                    className="mt-2 min-h-28 w-full resize-y rounded-xl border border-zinc-700 bg-zinc-950 p-3 text-sm leading-6 text-zinc-100 placeholder:text-zinc-600 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
+                    value={draftAnswers.closing}
+                    onChange={(event) => updateDraftAnswer("closing", event.target.value)}
+                    placeholder="예: 이 경험을 바탕으로 안정적인 변경에 기여하겠습니다."
+                    maxLength={500}
+                  />
+                </label>
+              </div>
+              <button
+                className="mt-5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-5 py-2.5 text-sm font-semibold text-emerald-200 hover:border-emerald-400"
+                type="button"
+                onClick={createDraftFromAnswers}
+              >
+                작성 내용으로 원고 만들기
+              </button>
+            </section>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               <label className="block">
