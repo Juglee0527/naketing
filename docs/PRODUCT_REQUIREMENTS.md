@@ -34,6 +34,7 @@ Naketing의 현재 수익화 목표는 `naketing.co.kr`에 말하기·자기소�
 - 홈의 주 행동은 `/program`의 자기소개 점검 시작이며 Guide와 Tool은 보조 탐색 경로로 제공합니다.
 - 주요 메뉴는 프로그램 소개(`/program`), 가이드(`/guides`), 도구(`/tools`) 3개만 제공합니다.
 - 개인정보 처리방침(`/privacy`)과 문의(`/contact`)는 Footer의 운영 보조 링크로 제공합니다.
+- 점검 기준과 한계(`/methodology`)는 Footer와 Program 및 Tool 상세에서 접근할 수 있는 결과 해석 기준으로 제공합니다.
 - 시작하기(`/start`), 회사소개(`/about`), 대표소개(`/founder`) 화면은 제공하지 않습니다.
 - 개발자 사이트 기능을 기존 Naketing route에 섞지 않습니다.
 - AI 분석 MVP를 구현하기 전까지는 AI 분석이 아직 제공되지 않는다는 현재 상태를 명확히 표현합니다.

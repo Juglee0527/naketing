@@ -72,7 +72,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <footer className="border-t border-zinc-800 bg-zinc-950/80">
             <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-6 text-xs text-zinc-500 sm:flex-row sm:items-center sm:justify-between md:px-6">
               <p>© {new Date().getFullYear()} Naketing. Made by Junggeun Lee.</p>
-              <nav className="flex gap-4" aria-label="하단 메뉴">
+              <nav className="flex flex-wrap gap-4" aria-label="하단 메뉴">
+                <Link href="/methodology" className="hover:text-violet-300">
+                  점검 기준
+                </Link>
                 <Link href="/privacy" className="hover:text-violet-300">
                   개인정보 처리방침
                 </Link>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { IntroductionProgram } from "@/components/introduction-program";
 
@@ -72,6 +73,9 @@ export default function ProgramPage() {
           원고는 저장하거나 외부 API로 전송하지 않습니다. 점검 결과는 글자 수와 표현 규칙을 바탕으로 하며,
           음성 분석이나 AI 평가가 아닙니다. 실제 말하기 시간은 쉼, 강조와 현장 상황에 따라 달라질 수 있습니다.
         </p>
+        <Link className="mt-4 inline-flex text-sm font-semibold text-violet-300 hover:text-violet-200" href="/methodology">
+          점검 기준과 한계 확인 →
+        </Link>
       </aside>
     </div>
   );

@@ -57,6 +57,7 @@ naketing/
 
 - `/`
 - `/program`
+- `/methodology`
 - `/privacy`
 - `/contact`
 - `/guides`
@@ -64,7 +65,7 @@ naketing/
 - `/tools`
 - `/tools/[tool]`
 
-Header의 주요 메뉴는 `/program`, `/guides`, `/tools` 3개입니다. `/privacy`와 `/contact`는 Footer에서만 연결합니다.
+Header의 주요 메뉴는 `/program`, `/guides`, `/tools` 3개입니다. `/methodology`, `/privacy`, `/contact`는 Footer의 참고 및 운영 링크로 연결합니다.
 
 ### 렌더링과 빌드
 

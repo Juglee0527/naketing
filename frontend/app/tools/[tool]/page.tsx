@@ -97,6 +97,9 @@ export default async function ToolPage({ params }: ToolPageProps) {
               </li>
             ))}
           </ul>
+          <Link className="mt-5 inline-flex text-sm font-semibold text-violet-300 hover:text-violet-200" href="/methodology">
+            전체 점검 기준과 한계 →
+          </Link>
         </div>
         <div className="rounded-2xl border border-violet-500/30 bg-violet-500/10 p-6">
           <p className="text-sm font-semibold text-violet-200">계산 예시</p>
