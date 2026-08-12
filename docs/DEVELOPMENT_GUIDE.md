@@ -186,7 +186,7 @@ NEXT_PUBLIC_GOOGLE_ADSENSE_PUBLISHER_ID=실제 AdSense publisher ID
 
 - 값이 없으면 스크립트를 렌더링하지 않습니다.
 - `ca-pub-` 뒤에 숫자 16개가 오는 형식이 아니면 build를 실패시킵니다.
-- 실제 ID가 설정된 production HTML에서 AdSense 스크립트가 한 번만 렌더링되는지 확인합니다.
+- 실제 ID가 설정된 production HTML의 `<head>`에서 AdSense 스크립트가 한 번만 렌더링되고 `<body>`에는 없는지 확인합니다.
 - AdSense 화면에서 사이트 연결을 확인하기 전까지 연결 완료로 기록하지 않습니다.
 - 승인 후 광고 단위 ID와 `ads.txt`는 별도 커밋으로 적용합니다.
 

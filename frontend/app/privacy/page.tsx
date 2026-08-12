@@ -24,9 +24,9 @@ export default function PrivacyPage() {
       <section className="space-y-3">
         <h2 className="text-xl font-semibold">현재 제공 상태</h2>
         <p className="leading-7 text-zinc-300">
-          Naketing은 현재 서비스 소개 페이지를 제공하며 회원가입, 로그인, 문의 양식, 음성 저장,
-          AI 분석, Analytics와 광고 기능을 운영하지 않습니다. 사용자가 사이트 화면에 직접 입력하거나
-          제출하는 개인정보를 수집하지 않습니다.
+          Naketing은 현재 브라우저에서 동작하는 자기소개 점검 프로그램과 무료 도구를 제공합니다.
+          회원가입, 로그인, 문의 양식, 음성 저장, AI 분석과 Analytics는 운영하지 않습니다. 프로그램과
+          도구에 입력한 원고는 서버로 전송하거나 저장하지 않습니다.
         </p>
       </section>
 
@@ -40,11 +40,12 @@ export default function PrivacyPage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Google AdSense 적용 계획</h2>
+        <h2 className="text-xl font-semibold">Google AdSense 준비 상태와 적용 계획</h2>
         <p className="leading-7 text-zinc-300">
-          현재 Google AdSense 광고 코드는 적용되어 있지 않습니다. 향후 광고가 적용되면 Google을
-          포함한 제3자 사업자가 이전 방문 기록을 바탕으로 광고를 제공하기 위해 쿠키를 사용할 수
-          있으며, Google과 파트너는 이 사이트 또는 다른 사이트 방문 기록을 활용할 수 있습니다.
+          현재 실제 광고 단위와 광고 노출 기능은 적용되어 있지 않습니다. 사이트 심사를 시작하면 실제
+          게시자 ID로 Google AdSense 사이트 확인 스크립트가 로드될 수 있습니다. 향후 광고가 적용되면
+          Google을 포함한 제3자 사업자가 광고 제공을 위해 쿠키를 사용할 수 있으며, Google과 파트너는
+          이 사이트 또는 다른 사이트의 방문 기록을 활용할 수 있습니다.
         </p>
         <p className="leading-7 text-zinc-300">
           사용자는 Google의 광고 설정에서 맞춤 광고 사용 여부를 관리할 수 있습니다. 실제 광고 적용

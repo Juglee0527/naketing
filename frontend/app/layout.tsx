@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { AdSenseSiteScript } from "@/components/adsense-site-script";
+import { getAdSensePublisherId } from "@/lib/adsense";
 import { siteConfig } from "@/lib/site";
 
 import "./globals.css";
@@ -25,10 +25,21 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const publisherId = getAdSensePublisherId();
+
   return (
     <html lang="ko">
+      <head>
+        {publisherId && (
+          <script
+            id="naketing-adsense-site-script"
+            async
+            crossOrigin="anonymous"
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${publisherId}`}
+          />
+        )}
+      </head>
       <body className="bg-zinc-950 text-white">
-        <AdSenseSiteScript />
         <div className="flex min-h-screen flex-col">
           <header className="border-b border-zinc-800 bg-zinc-950/90">
             <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6">

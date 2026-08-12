@@ -81,7 +81,7 @@ Header의 주요 메뉴는 `/program`, `/guides`, `/tools` 3개입니다. `/priv
 
 ### AdSense 환경변수
 
-`NEXT_PUBLIC_GOOGLE_ADSENSE_PUBLISHER_ID`는 AdSense 사이트 심사 스크립트에 공개되는 publisher ID입니다. 값이 없으면 스크립트를 렌더링하지 않으며 실제 계정 값은 저장소에 커밋하지 않고 `frontend` Vercel Project의 환경변수로 관리합니다. 형식과 로컬 변수 목록은 `frontend/.env.example`을 따릅니다.
+`NEXT_PUBLIC_GOOGLE_ADSENSE_PUBLISHER_ID`는 AdSense 사이트 심사 스크립트에 공개되는 publisher ID입니다. 값이 없으면 스크립트를 렌더링하지 않으며, 값이 있으면 root layout에서 모든 공개 route의 HTML `<head>`에 한 번만 주입합니다. 실제 계정 값은 저장소에 커밋하지 않고 `frontend` Vercel Project의 환경변수로 관리합니다. 형식과 로컬 변수 목록은 `frontend/.env.example`을 따릅니다.
 
 ## `developer-site`
 
