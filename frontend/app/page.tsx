@@ -9,10 +9,10 @@ export default function Home() {
   const mainSections = [
     {
       number: "01",
-      title: "프로그램 소개",
-      description: "나를 설명하는 힘을 기르기 위해 Naketing이 다루는 문제와 프로그램 방향을 확인합니다.",
+      title: "자기소개 점검",
+      description: "상황과 목표 시간을 정하고 원고의 분량, 표현과 구조를 3단계로 점검합니다.",
       href: "/program",
-      linkLabel: "프로그램 알아보기",
+      linkLabel: "점검 시작하기",
     },
     {
       number: "02",
@@ -41,24 +41,24 @@ export default function Home() {
             <h1 className="mt-5 max-w-3xl text-4xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl">
               나를 설명하는 말,
               <br />
-              <span className="text-violet-400">더 짧고 분명하게.</span>
+              <span className="text-violet-400">직접 쓰고 바로 점검하세요.</span>
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-zinc-300 md:text-lg">
-              Naketing은 자기소개와 발표에서 핵심을 놓치지 않도록 실전 가이드와 브라우저 기반
-              도구를 제공합니다. 읽고, 직접 점검하고, 필요한 표현부터 고쳐보세요.
+              상황과 목표 시간을 선택하고 자기소개 원고를 입력하면 분량, 군더더기 표현과 기본 구조를
+              브라우저 안에서 점검합니다. 결과에 따라 필요한 표현부터 하나씩 고쳐보세요.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                href="/guides"
+                href="/program"
                 className="rounded-xl bg-violet-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-500"
               >
-                가이드부터 읽기
+                자기소개 점검 시작하기
               </Link>
               <Link
-                href="/program"
+                href="/guides"
                 className="rounded-xl border border-zinc-700 px-6 py-3 text-sm font-semibold text-zinc-200 transition-colors hover:border-zinc-500 hover:bg-zinc-900"
               >
-                프로그램 알아보기
+                가이드 읽기
               </Link>
             </div>
           </div>
@@ -67,6 +67,10 @@ export default function Home() {
             <p className="text-sm font-semibold text-zinc-200">지금 이용할 수 있습니다</p>
             <dl className="mt-6 space-y-6">
               <div>
+                <dt className="text-3xl font-bold text-white">3단계</dt>
+                <dd className="mt-1 text-sm text-zinc-400">설정부터 결과까지 이어지는 자기소개 점검</dd>
+              </div>
+              <div>
                 <dt className="text-3xl font-bold text-white">{guides.length}</dt>
                 <dd className="mt-1 text-sm text-zinc-400">직접 작성한 말하기 가이드</dd>
               </div>
@@ -74,11 +78,10 @@ export default function Home() {
                 <dt className="text-3xl font-bold text-white">{tools.length}</dt>
                 <dd className="mt-1 text-sm text-zinc-400">설치 없이 쓰는 무료 도구</dd>
               </div>
-              <div>
-                <dt className="text-base font-semibold text-emerald-300">브라우저 안에서 처리</dt>
-                <dd className="mt-1 text-sm leading-6 text-zinc-400">도구에 입력한 원고를 서버로 보내지 않습니다.</dd>
-              </div>
             </dl>
+            <p className="mt-6 text-sm leading-6 text-emerald-300">
+              프로그램과 도구에 입력한 원고는 서버로 보내지 않습니다.
+            </p>
           </aside>
         </div>
       </section>
@@ -86,7 +89,7 @@ export default function Home() {
       <section className="border-b border-zinc-800 bg-zinc-900/30">
         <div className="mx-auto max-w-6xl px-4 py-14 md:px-6">
           <p className="text-sm font-medium text-violet-300">Explore Naketing</p>
-          <h2 className="mt-2 text-2xl font-bold">세 가지 영역에서 필요한 것만 찾으세요</h2>
+          <h2 className="mt-2 text-2xl font-bold">점검하고, 읽고, 필요한 도구를 사용하세요</h2>
           <div className="mt-9 grid border-y border-zinc-800 md:grid-cols-3">
             {mainSections.map((section, index) => (
               <article
