@@ -83,7 +83,9 @@ export function IntroductionProgram() {
   const [baselineResult, setBaselineResult] = useState<IntroductionAnalysisResult | null>(null);
   const [analysisCount, setAnalysisCount] = useState(0);
   const [error, setError] = useState("");
+  const [draftError, setDraftError] = useState("");
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
+  const scriptRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     stepHeadingRef.current?.focus();
@@ -98,6 +100,7 @@ export function IntroductionProgram() {
     const analyzedResult = analyzeIntroduction(script, pace, targetSeconds);
     if (!analyzedResult) {
       setError("점검할 자기소개 원고를 입력해 주세요.");
+      scriptRef.current?.focus();
       return;
     }
 
@@ -110,25 +113,25 @@ export function IntroductionProgram() {
 
   function updateDraftAnswer(field: keyof IntroductionDraftAnswers, value: string) {
     setDraftAnswers((current) => ({ ...current, [field]: value }));
-    setError("");
+    setDraftError("");
   }
 
   function createDraftFromAnswers() {
     const application = applyIntroductionDraft(script, draftAnswers);
 
     if (application.status === "existing-script") {
-      setError("기존 원고를 보호하기 위해 자동으로 덮어쓰지 않았습니다. 원고를 비운 뒤 다시 시도해 주세요.");
+      setDraftError("기존 원고를 보호하기 위해 자동으로 덮어쓰지 않았습니다. 원고를 비운 뒤 다시 시도해 주세요.");
       return;
     }
 
     if (application.status === "empty-draft") {
-      setError("작성 도우미의 질문에 한 가지 이상 답해 주세요.");
+      setDraftError("작성 도우미의 질문에 한 가지 이상 답해 주세요.");
       return;
     }
 
     setScript(application.script);
     setResult(null);
-    setError("");
+    setDraftError("");
   }
 
   function resetProgram() {
@@ -143,6 +146,7 @@ export function IntroductionProgram() {
     setBaselineResult(null);
     setAnalysisCount(0);
     setError("");
+    setDraftError("");
   }
 
   return (
@@ -191,7 +195,7 @@ export function IntroductionProgram() {
                   [IntroductionSituation, (typeof situationDefinitions)[IntroductionSituation]]
                 >).map(([value, definition]) => (
                   <label
-                    className={`cursor-pointer rounded-xl border p-4 transition-colors ${
+                    className={`cursor-pointer rounded-xl border p-4 transition-colors has-[:focus-visible]:outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-violet-400 ${
                       situation === value
                         ? "border-violet-500 bg-violet-500/10"
                         : "border-zinc-700 bg-zinc-950/60 hover:border-zinc-500"
@@ -248,7 +252,7 @@ export function IntroductionProgram() {
             </div>
 
             <button
-              className="mt-8 rounded-xl bg-violet-600 px-6 py-3 text-sm font-semibold text-white hover:bg-violet-500"
+              className="mt-8 rounded-xl bg-violet-600 px-6 py-3 text-sm font-semibold text-white hover:bg-violet-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
               type="button"
               onClick={moveToWriting}
             >
@@ -283,7 +287,7 @@ export function IntroductionProgram() {
               <h3 className="mt-2 text-lg font-semibold" id="draft-helper-heading">
                 질문별 작성 도우미
               </h3>
-              <p className="mt-2 text-sm leading-6 text-zinc-400">
+              <p className="mt-2 text-sm leading-6 text-zinc-400" id="draft-helper-description">
                 답할 수 있는 항목만 작성해도 입력 순서대로 하나의 원고로 연결합니다. 이미 작성한 원고는 자동으로 덮어쓰지 않습니다.
               </p>
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -294,6 +298,8 @@ export function IntroductionProgram() {
                     className="mt-2 min-h-28 w-full resize-y rounded-xl border border-zinc-700 bg-zinc-950 p-3 text-sm leading-6 text-zinc-100 placeholder:text-zinc-600 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
                     value={draftAnswers.identity}
                     onChange={(event) => updateDraftAnswer("identity", event.target.value)}
+                    aria-describedby="draft-helper-description draft-helper-error"
+                    aria-invalid={draftError ? true : undefined}
                     placeholder="예: 저는 복잡한 업무를 정리하는 웹 개발자입니다."
                     maxLength={500}
                   />
@@ -305,6 +311,8 @@ export function IntroductionProgram() {
                     className="mt-2 min-h-28 w-full resize-y rounded-xl border border-zinc-700 bg-zinc-950 p-3 text-sm leading-6 text-zinc-100 placeholder:text-zinc-600 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
                     value={draftAnswers.situation}
                     onChange={(event) => updateDraftAnswer("situation", event.target.value)}
+                    aria-describedby="draft-helper-description draft-helper-error"
+                    aria-invalid={draftError ? true : undefined}
                     placeholder="상황과 직접 한 행동을 적어보세요."
                     maxLength={500}
                   />
@@ -316,6 +324,8 @@ export function IntroductionProgram() {
                     className="mt-2 min-h-28 w-full resize-y rounded-xl border border-zinc-700 bg-zinc-950 p-3 text-sm leading-6 text-zinc-100 placeholder:text-zinc-600 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
                     value={draftAnswers.focus}
                     onChange={(event) => updateDraftAnswer("focus", event.target.value)}
+                    aria-describedby="draft-helper-description draft-helper-error"
+                    aria-invalid={draftError ? true : undefined}
                     placeholder="강조할 근거를 구체적으로 적어보세요."
                     maxLength={500}
                   />
@@ -327,18 +337,23 @@ export function IntroductionProgram() {
                     className="mt-2 min-h-28 w-full resize-y rounded-xl border border-zinc-700 bg-zinc-950 p-3 text-sm leading-6 text-zinc-100 placeholder:text-zinc-600 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
                     value={draftAnswers.closing}
                     onChange={(event) => updateDraftAnswer("closing", event.target.value)}
+                    aria-describedby="draft-helper-description draft-helper-error"
+                    aria-invalid={draftError ? true : undefined}
                     placeholder="예: 이 경험을 바탕으로 안정적인 변경에 기여하겠습니다."
                     maxLength={500}
                   />
                 </label>
               </div>
               <button
-                className="mt-5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-5 py-2.5 text-sm font-semibold text-emerald-200 hover:border-emerald-400"
+                className="mt-5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-5 py-2.5 text-sm font-semibold text-emerald-200 hover:border-emerald-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
                 type="button"
                 onClick={createDraftFromAnswers}
               >
                 작성 내용으로 원고 만들기
               </button>
+              <p className="mt-3 min-h-6 text-sm text-red-300" id="draft-helper-error" role="alert">
+                {draftError}
+              </p>
             </section>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -370,8 +385,11 @@ export function IntroductionProgram() {
               <span className="text-sm font-semibold text-zinc-200">자기소개 원고</span>
               <textarea
                 id="program-script"
+                ref={scriptRef}
                 className="mt-2 min-h-72 w-full resize-y rounded-xl border border-zinc-700 bg-zinc-950 p-4 text-sm leading-7 text-zinc-100 placeholder:text-zinc-600 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
                 value={script}
+                aria-describedby="program-script-help program-script-error"
+                aria-invalid={error ? true : undefined}
                 onChange={(event) => {
                   setScript(event.target.value);
                   setResult(null);
@@ -381,17 +399,17 @@ export function IntroductionProgram() {
                 maxLength={5000}
               />
             </label>
-            <p className="mt-2 flex justify-between gap-4 text-xs text-zinc-500">
+            <p className="mt-2 flex justify-between gap-4 text-xs text-zinc-500" id="program-script-help">
               <span>입력한 원고는 외부 서버로 전송하지 않습니다.</span>
               <span>{script.length.toLocaleString("ko-KR")} / 5,000자</span>
             </p>
-            <p className="mt-3 min-h-6 text-sm text-red-300" role="alert">
+            <p className="mt-3 min-h-6 text-sm text-red-300" id="program-script-error" role="alert">
               {error}
             </p>
 
             <div className="mt-3 flex flex-wrap gap-3">
               <button
-                className="rounded-xl border border-zinc-700 px-5 py-2.5 text-sm font-semibold text-zinc-200 hover:bg-zinc-800"
+                className="rounded-xl border border-zinc-700 px-5 py-2.5 text-sm font-semibold text-zinc-200 hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
                 type="button"
                 onClick={() => {
                   setError("");
@@ -401,7 +419,7 @@ export function IntroductionProgram() {
                 이전 단계
               </button>
               <button
-                className="rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-500"
+                className="rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
                 type="button"
                 onClick={analyzeScript}
               >
