@@ -178,10 +178,10 @@ JWT Decoder는 서명을 검증하지 않습니다. 인증 또는 보안 판단 
 
 다음은 코드나 문서만으로 확정할 수 없습니다.
 
-- `developer-site` Vercel Project 생성 및 Git 자동 배포 연결 여부
-- `dev.naketing.co.kr` custom domain과 DNS 연결 완료 여부
 - 공개할 연락처
 - 공개할 상세 경력
 - Analytics, Search Console, AdSense 계정
 
 미확정 항목은 사용자 확인 없이 구현 완료 상태로 바꾸지 않습니다.
+
+`developer-site` Vercel Project, Git 자동 배포, `dev.naketing.co.kr` custom domain 연결은 2026-08-12에 확인됐습니다. 현재 운영 설정과 검증 근거는 `docs/DEPLOYMENT.md`에서 관리합니다.

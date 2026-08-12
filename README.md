@@ -55,4 +55,6 @@ npm.cmd run build
 
 - `frontend`는 일반 Next.js production build를 생성합니다.
 - `developer-site`는 `output: "export"`를 사용하며 `developer-site/out`에 정적 파일을 생성합니다.
-- 기존 서비스는 Vercel에서 운영 중이며 `dev.naketing.co.kr`은 아직 연결되지 않았습니다. 확인 근거와 사용자 작업은 [배포 가이드](./docs/DEPLOYMENT.md)를 참고하세요.
+- 기존 서비스와 `dev.naketing.co.kr` 개발자 사이트는 Vercel에서 운영 중입니다.
+- Developer Site의 Vercel Output Directory는 정적 export 결과인 `out`으로 설정합니다.
+- 확인된 운영 상태, DNS 전파 확인 및 장애 대응은 [배포 가이드](./docs/DEPLOYMENT.md)를 참고하세요.

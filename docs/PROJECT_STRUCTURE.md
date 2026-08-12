@@ -125,14 +125,16 @@ NEXT_PUBLIC_SITE_URL=https://dev.naketing.co.kr
 저장소와 2026-08-12 운영 응답에서 확인한 사실은 다음과 같습니다.
 
 - GitHub Actions CI가 `frontend`, `developer-site`를 독립적으로 검증합니다.
-- 자동 배포 workflow는 없습니다.
+- 저장소가 관리하는 자동 배포 workflow는 없습니다.
+- `developer-site` Vercel Project는 GitHub `main` branch와 연결되어 push 후 자동 배포됩니다.
 - `vercel.json`이 없습니다.
 - 활성 `CNAME` 파일이 없습니다.
 - `developer-site`는 정적 export가 가능합니다.
 - `naketing.co.kr`과 `www.naketing.co.kr`은 Vercel에서 응답합니다.
-- `dev.naketing.co.kr`은 2026-08-12 기준 DNS에 존재하지 않습니다.
+- `dev.naketing.co.kr`은 Vercel custom domain과 DNS 연결이 완료됐으며 Vercel에서 `Valid Configuration` 상태입니다.
+- 공용 DNS에서 `dev.naketing.co.kr`의 Vercel CNAME 해석을 확인했고, 사용자가 모바일 데이터 환경에서 실제 HTTPS 접속을 확인했습니다.
 
-Vercel 계정에서 관리하는 Project, Git 자동 배포, custom domain 설정은 저장소만으로 확인할 수 없습니다. 운영 절차와 검증 기준은 `docs/DEPLOYMENT.md`를 따릅니다.
+Vercel Project와 custom domain은 저장소 파일이 아니라 Vercel Dashboard에서 관리합니다. Developer Site의 Root Directory는 `developer-site`, Output Directory는 `out`입니다. 운영 절차와 검증 기준은 `docs/DEPLOYMENT.md`를 따릅니다.
 
 논리적인 배포 단위는 다음과 같습니다.
 
