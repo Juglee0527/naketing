@@ -18,7 +18,7 @@ export default function RootLayout({
         <div className="flex min-h-screen flex-col">
             {/* NAVBAR */}
             <header className="border-b border-zinc-800 bg-zinc-950/90">
-                <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-6">
+                <nav className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between md:px-6">
                     {/* 로고 */}
                     <Link href="/" className="flex items-center gap-2">
                         <div className="h-8 w-8 rounded-xl bg-violet-500 flex items-center justify-center text-xs font-bold">
@@ -35,7 +35,7 @@ export default function RootLayout({
                     </Link>
 
                     {/* 메뉴 */}
-                    <div className="flex items-center gap-5 text-sm text-zinc-300">
+                    <div className="flex w-full flex-wrap items-center gap-x-4 gap-y-2 text-xs text-zinc-300 sm:w-auto sm:flex-nowrap sm:gap-5 sm:text-sm">
                         <Link href="/start" className="hover:text-violet-300">
                             시작하기
                         </Link>
@@ -59,8 +59,16 @@ export default function RootLayout({
 
             {/* 푸터 */}
             <footer className="border-t border-zinc-800 bg-zinc-950/80">
-                <div className="mx-auto max-w-6xl px-4 py-6 text-xs text-zinc-500 md:px-6">
-                    © {new Date().getFullYear()} Naketing. Made by Junggeun Lee.
+                <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-6 text-xs text-zinc-500 sm:flex-row sm:items-center sm:justify-between md:px-6">
+                    <p>© {new Date().getFullYear()} Naketing. Made by Junggeun Lee.</p>
+                    <nav className="flex gap-4" aria-label="하단 메뉴">
+                        <Link href="/privacy" className="hover:text-violet-300">
+                            개인정보 처리방침
+                        </Link>
+                        <Link href="/contact" className="hover:text-violet-300">
+                            문의
+                        </Link>
+                    </nav>
                 </div>
             </footer>
         </div>
