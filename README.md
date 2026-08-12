@@ -1,144 +1,155 @@
-# 🟣 Naketing — 나를 마케팅하다
+# Naketing
 
-**🔗 https://www.naketing.co.kr/**
+`naketing.co.kr` 서비스와 `dev.naketing.co.kr` 개발자 사이트를 같은 저장소에서 독립적으로 관리합니다.
 
-> **나 자신을 설명하는 능력은 AI 시대의 새로운 경쟁력이다.
-> 말(언어)·브랜딩·표현력, 이제 누구나 스스로를 ‘브랜드’로 만든다.**
+두 앱은 서로 다른 배포 단위입니다. 루트 workspace나 모노레포 도구를 사용하지 않으며, 각 디렉터리에서 의존성을 설치하고 빌드합니다.
 
-나케팅(Naketing)은 개인의 **말하기 능력**, **표현력**, **브랜딩 역량**을
-AI 기반으로 향상시키는 **퍼스널 브랜딩 플랫폼**입니다.
+## 프로젝트 구조
 
-“말한다”는 행위는 단순한 정보 전달이 아니라
-**자기 자신을 세상에 설명하고, 설득하고, 증명하는 기술**입니다.
-AI는 대부분의 작업을 대신해주는 시대지만,
-**‘나를 표현하는 능력’만큼은 인간만의 고유 영역**입니다.
+```text
+naketing/
+├─ frontend/                 # 기존 Naketing 서비스
+│  ├─ app/                   # Next.js App Router
+│  ├─ public/
+│  ├─ next.config.ts
+│  └─ package.json
+├─ developer-site/           # 개발자 사이트
+│  ├─ app/                   # 페이지, sitemap, robots
+│  ├─ components/            # 공통 UI와 브라우저 도구
+│  ├─ content/blog/          # Markdown 블로그 글
+│  ├─ lib/                   # 블로그 파싱, 사이트/도구 정의
+│  ├─ next.config.ts
+│  └─ package.json
+└─ README.md
+```
 
+## 기술 스택
+
+두 앱은 현재 같은 버전을 사용합니다.
+
+- Next.js 16.0.3 (App Router)
+- React 19.2.0
+- TypeScript 5
+- Tailwind CSS 4
+- ESLint 9
+
+## 기존 Naketing 서비스
+
+`frontend`는 `naketing.co.kr`용 기존 서비스입니다. 현재 라우트는 다음과 같습니다.
+
+- `/`
+- `/start`
+- `/about`
+- `/founder`
+- `/program`
+
+기존 코드는 개발자 사이트 추가 과정에서 수정하지 않았습니다. `frontend/next.config.ts`에는 `output: "export"`가 없으므로 Next.js의 일반 production build를 생성합니다.
+
+### 로컬 실행
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+기본 주소는 `http://localhost:3000`입니다.
+
+### 검증과 빌드
+
+```bash
+cd frontend
+npm run lint
+npm run build
+```
+
+## Developer Site
+
+`developer-site`는 `dev.naketing.co.kr`용 독립 앱입니다.
+
+- Home: 개발자 소개, 기술 스택, 최근 글, 주요 도구
+- Blog: Markdown 글 목록/상세, 최신순 정렬, 글별 SEO metadata
+- Tools: JSON Formatter, JWT Decoder
+- Projects: 프로젝트별 기술, 문제, 해결 방식, 링크
+- About: 확인 가능한 프로필 정보와 수정용 TODO
+- SEO: canonical, Open Graph, `sitemap.xml`, `robots.txt`, 블로그 JSON-LD
+- AdSense: 실제 광고 코드 없이 Blog/Tools 하단에 향후 삽입 경계만 제공
+
+JSON Formatter와 JWT Decoder의 입력값은 API Route나 서버로 전송하지 않고 브라우저에서 처리합니다. JWT Decoder는 서명을 검증하지 않습니다.
+
+### 로컬 실행
+
+기존 앱과 동시에 실행할 때는 다른 포트를 사용합니다.
+
+```bash
+cd developer-site
+npm install
+npm run dev -- --port 3001
+```
+
+개발자 사이트 주소는 `http://localhost:3001`입니다.
+
+### 환경변수
+
+canonical URL과 sitemap의 기본 origin은 `https://dev.naketing.co.kr`입니다. 다른 환경에서 빌드할 때만 다음 값을 설정합니다.
+
+```bash
+NEXT_PUBLIC_SITE_URL=https://dev.naketing.co.kr
+```
+
+예시는 `developer-site/.env.example`에 있습니다.
+
+### 검증과 빌드
+
+```bash
+cd developer-site
+npm run lint
+npm run build
+```
+
+`developer-site/next.config.ts`는 `output: "export"`를 사용합니다. 빌드 결과는 `developer-site/out`에 생성되며 Node.js 서버 없이 정적 호스팅할 수 있습니다.
+
+## 배포 구조
+
+현재 저장소에는 GitHub Actions workflow, `vercel.json`, 활성 `CNAME` 파일이 없습니다. 과거 README에는 GitHub Pages 자동 배포가 적혀 있었지만 현재 Git 추적 파일만으로는 실제 CI/CD 구성을 확인할 수 없습니다.
+
+권장 배포 단위는 다음과 같습니다.
+
+| 호스트 | 프로젝트 루트 | 빌드 명령 | 출력 |
+| --- | --- | --- | --- |
+| `naketing.co.kr` | `frontend` | `npm run build` | Next.js production build |
+| `dev.naketing.co.kr` | `developer-site` | `npm run build` | `out` 정적 파일 |
+
+Vercel을 사용한다면 같은 Git 저장소를 두 프로젝트에 연결하고 Root Directory를 각각 지정할 수 있습니다. 정적 호스팅을 사용한다면 `developer-site/out`을 `dev.naketing.co.kr`에 연결합니다. 실제 DNS와 호스팅 설정은 운영 환경에서 별도로 확인해야 합니다.
+
+## Blog 글 추가 방법
+
+`developer-site/content/blog`에 `.md` 파일을 추가합니다.
+
+```markdown
+---
+title: "글 제목"
+description: "검색 결과와 목록에 표시할 설명"
+date: 2026-08-12
+tags: [Java, Spring]
 ---
 
-## 🌟 프로젝트 소개
+# 본문 제목
 
-### **왜 ‘나케팅’인가?**
+본문을 작성합니다.
+```
 
-4차 산업혁명과 AI의 발전으로
-누구나 **개인 브랜드**를 만들고 **나만의 사업**을 시작할 수 있는 시대가 되었습니다.
-그러나 모든 자동화가 가능해지면서
-**“나를 어떻게 설명하고 설득할 것인가?”**
-이 질문이 더욱 중요해졌습니다.
+필수 metadata는 `title`, `description`, `date`, `tags`입니다. 파일명이 기본 slug가 되며, 필요한 경우 frontmatter에 `slug`를 지정할 수 있습니다. slug는 영문 소문자, 숫자, 하이픈만 지원합니다.
 
-> 나케팅은 **나를 브랜드화하는 능력**을 키우기 위한 서비스입니다.
+빌드 시 metadata 누락, 잘못된 날짜, 잘못된 slug, 중복 slug를 오류로 처리합니다. 글을 commit/push한 뒤 해당 앱이 다시 배포되면 목록, 상세 페이지, sitemap에 반영됩니다.
 
-말하기·어휘·제스처·표현력 등
-인간의 모든 ‘표현 수단’을 AI를 통해 분석하고 성장시켜
-사용자가 자신만의 브랜드를 구축할 수 있도록 돕습니다.
+현재 Markdown 렌더러는 제목(`#`~`###`), 문단, 순서 없는 목록, fenced code block, 굵게, inline code, 링크를 지원합니다. 더 많은 문법이 실제로 필요해질 때 범위를 확장합니다.
 
----
+## Tool 추가 방법
 
-## 🎯 핵심 가치
+1. `developer-site/lib/tools.ts`의 `ToolSlug`와 `tools`에 도구를 추가합니다.
+2. 브라우저에서 동작하는 UI를 `developer-site/components`에 Client Component로 구현합니다.
+3. `developer-site/app/tools/[tool]/page.tsx`에서 slug에 맞는 컴포넌트를 렌더링합니다.
+4. `npm run lint`와 `npm run build`로 정적 경로, 타입, metadata를 검증합니다.
 
-* **말하기(Speaking) 중심의 브랜딩 능력 강화**
-* 한국어에 특화된 **로컬 언어 AI 코치**
-* 네이버 기반 한국어 빅데이터 활용(희망 사항)
-* 글로벌 확장 가능한 다국어 언어 모델 구조
-* 전 세계 누구나 자신을 명확하게 표현할 수 있는 시대 창조
-
----
-
-## 🧠 주요 기능 (예정)
-
-### 1) AI 말하기 코칭
-
-* 녹음 기반 음성 분석
-* 말버릇·발음·속도·명확도 피드백
-* 어휘 다양성(Average Lexical Richness) 평가
-
-### 2) 대화형 말하기 연습 챗봇
-
-* 한국어 기반 대화 AI
-* 실전 면접·회화·설득 시나리오 제공
-
-### 3) 브랜드 자아 분석
-
-* 자기표현 능력 분석
-* 브랜드 키워드 추출
-* 스토리텔링 구조 제안
-
-### 4) 개인 브랜딩 대시보드
-
-* 성장 기록 시각화
-* 말하기 능력 변화 그래프
-* 목표 기반 맞춤 피드백
-
----
-
-## 🔧 기술 스택 (2025 기준)
-
-### **Frontend (최신 트렌드 기반)**
-
-* **Next.js 14 (App Router)** – 2025년 프론트 표준
-* **React 18**
-* **TypeScript**
-* **Tailwind CSS**
-* 향후: Vercel 또는 GitHub Pages 정적 배포(SGI 방식)
-
-### **Backend (추후 개발)**
-
-* Spring Boot 3.x (Java 17)
-* JPA + QueryDSL
-* PostgreSQL
-* Redis (캐시, 세션, 레이트 리밋)
-* Spring Security + JWT
-
-### **AI / NLP (추후)**
-
-* HuggingFace Transformers
-* 한국어 특화 LLM 실험
-* 음성 분석 모델
-* 텍스트 → 말 스타일 분석 파이프라인
-
-### **DevOps / Infra**
-
-* GitHub Actions (자동 빌드 & 배포 파이프라인)
-* DNS: 가비아
-* Hosting: GitHub Pages (`https://naketing.co.kr`)
-* 추후 확장: AWS (EC2 / RDS / S3 / CloudFront)
-
----
-
-## 🚀 배포
-
-현재 서비스는 **정적 랜딩 페이지 형태로 운영 중**입니다.
-
-GitHub Actions와 Pages 기반으로
-**코드 Push → 자동 빌드 → 자동 배포**가 이루어지는 CI/CD 환경을 구축했습니다.
-
----
-
-## 🧭 향후 개발 로드맵
-
-### **1단계 — 브랜드 확립**
-
-* 나케팅 로고 & 디자인 시스템
-* 랜딩 페이지 고도화
-
-### **2단계 — 웹앱(Android/iOS 대응)**
-
-* Next.js 기반 본격 앱 개발
-* 사용자 프로필 / 말하기 기록 관리
-
-### **3단계 — AI 말하기 MVP**
-
-* 음성 분석 + 텍스트 분석 파이프라인 구축
-
-### **4단계 — 글로벌 확장**
-
-* 다국어 LLM 실험
-* 국제 버전 페이지 출시
-
----
-
-## 👤 만든 사람
-
-**이정근 (Jeonggeun Lee)**
-
-* AI 기반 퍼스널 브랜딩 서비스 개발자
-* 기술을 통해 ‘나를 표현하는 시대’를 만들고자 함
+서버가 필요하지 않은 변환 기능에는 API Route를 추가하지 않습니다.
