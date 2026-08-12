@@ -174,6 +174,22 @@ Guide를 추가할 때는 `title`, `description`, 실제 `YYYY-MM-DD` 날짜, �
 
 AdSense 계정 생성, 약관 동의, 신원·주소·세금·지급 정보 등록, 사이트 심사 요청과 CMP 계정 설정은 저장소만으로 완료할 수 없는 사용자 작업입니다. 저장소 증거 없이 완료로 기록하지 않습니다.
 
+### AdSense 사이트 심사 스크립트
+
+사이트 심사 스크립트 경계는 구현돼 있으며 실제 publisher ID를 다음 build 변수로 전달합니다.
+
+```text
+NEXT_PUBLIC_GOOGLE_ADSENSE_PUBLISHER_ID=실제 AdSense publisher ID
+```
+
+실제 값은 `ca-pub-` 뒤에 숫자 16개가 오는 형식입니다. AdSense 계정에서 발급된 값을 Vercel의 `frontend` Project 환경변수에 등록합니다.
+
+- 값이 없으면 스크립트를 렌더링하지 않습니다.
+- `ca-pub-` 뒤에 숫자 16개가 오는 형식이 아니면 build를 실패시킵니다.
+- 실제 ID가 설정된 production HTML에서 AdSense 스크립트가 한 번만 렌더링되는지 확인합니다.
+- AdSense 화면에서 사이트 연결을 확인하기 전까지 연결 완료로 기록하지 않습니다.
+- 승인 후 광고 단위 ID와 `ads.txt`는 별도 커밋으로 적용합니다.
+
 ## 검증
 
 현재 자동 테스트 스크립트는 없습니다. 코드 변경 시 영향받은 앱에서 lint와 production build를 실행합니다.

@@ -85,9 +85,10 @@ Google AdSense 신청 전 내부 준비 기준은 원본 Guide 10개 이상입�
 
 ### Naketing AdSense
 
-- 현재 `frontend`에는 실제 AdSense 코드가 없으며 광고가 구현된 것으로 보지 않습니다.
+- `frontend`에는 환경변수 기반 사이트 심사 스크립트 경계가 구현돼 있지만 실제 publisher ID가 없으므로 현재 광고 스크립트를 렌더링하지 않습니다. 광고가 구현되거나 사이트 연결이 완료된 것으로 보지 않습니다.
 - 실제 AdSense 계정에서 발급된 publisher ID만 사용하고 가짜 ID를 코드나 문서에 넣지 않습니다.
 - publisher ID가 없으면 광고 스크립트와 광고 요청을 생성하지 않습니다.
+- publisher ID는 `ca-pub-` 뒤에 숫자 16개가 오는 형식만 허용하며 잘못된 값은 build 오류로 처리합니다.
 - 사이트 승인 전에는 사이트 확인에 필요한 범위만 구현하고, 실제 광고 단위는 승인 후 적용합니다.
 - 승인 후 초기 광고 위치는 Guide 본문 하단과 충분한 간격을 둔 Tool 결과 하단으로 제한합니다.
 - `ads.txt`는 실제 publisher ID를 받은 뒤 `naketing.co.kr/ads.txt`에서 제공하며 추측한 값을 미리 만들지 않습니다.

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { AdSenseSiteScript } from "@/components/adsense-site-script";
 import { siteConfig } from "@/lib/site";
 
 import "./globals.css";
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="ko">
       <body className="bg-zinc-950 text-white">
+        <AdSenseSiteScript />
         <div className="flex min-h-screen flex-col">
           <header className="border-b border-zinc-800 bg-zinc-950/90">
             <nav className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between md:px-6">

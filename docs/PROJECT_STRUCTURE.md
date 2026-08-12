@@ -80,6 +80,10 @@ naketing/
 
 `frontend`의 canonical, sitemap과 robots 기본 origin은 운영에서 응답하는 `https://www.naketing.co.kr`입니다. 다른 공개 origin에서 build할 때만 `NEXT_PUBLIC_SITE_URL`로 override합니다. 이 값은 비밀값이 아니며 build 결과에 공개됩니다.
 
+### AdSense 환경변수
+
+`NEXT_PUBLIC_GOOGLE_ADSENSE_PUBLISHER_ID`는 AdSense 사이트 심사 스크립트에 공개되는 publisher ID입니다. 값이 없으면 스크립트를 렌더링하지 않으며 실제 계정 값은 저장소에 커밋하지 않고 `frontend` Vercel Project의 환경변수로 관리합니다. 형식과 로컬 변수 목록은 `frontend/.env.example`을 따릅니다.
+
 ## `developer-site`
 
 ### 책임
