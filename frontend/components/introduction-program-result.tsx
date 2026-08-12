@@ -192,7 +192,9 @@ export function IntroductionProgramResult({
               <p className={`text-sm font-semibold ${check.met ? "text-emerald-300" : "text-amber-300"}`}>
                 {check.met ? "✓ 확인됨" : "△ 보완 필요"} · {check.label}
               </p>
-              <p className="mt-2 text-xs leading-5 text-zinc-500">{check.description}</p>
+              <p className="mt-2 text-xs leading-5 text-zinc-500">
+                {check.evidence ? `감지 근거: ${check.evidence}` : check.description}
+              </p>
             </li>
           ))}
         </ul>

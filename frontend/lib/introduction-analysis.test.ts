@@ -30,7 +30,7 @@ describe("analyzeIntroduction", () => {
       { phrase: "사실", count: 1, indices: [longSentence.length + 1] },
       { phrase: "그냥", count: 1, indices: [3] },
     ]);
-    expect(result?.repeatedWords).toContainEqual({ word: "프로젝트", count: 3 });
+    expect(result?.repeatedWords).toContainEqual({ word: "프로젝트", count: 4 });
     expect(result?.longSentences[0]).toMatchObject({ text: longSentence });
   });
 
@@ -55,6 +55,50 @@ describe("analyzeIntroduction", () => {
         expect.objectContaining({ id: "closing", met: false }),
       ]),
     );
+  });
+
+  it("does not treat a pronoun or a future contribution as identity and past outcome evidence", () => {
+    const result = analyzeIntroduction("저는 성실합니다. 입사 후 서비스 안정성에 기여하겠습니다.", "normal", 60);
+
+    expect(result?.structureChecks).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: "identity", met: false, evidence: null }),
+        expect.objectContaining({ id: "outcome", met: false, evidence: null }),
+        expect.objectContaining({ id: "closing", met: true }),
+      ]),
+    );
+  });
+
+  it("returns the sentence that supports each detected structure clue", () => {
+    const result = analyzeIntroduction(
+      "저는 웹 개발자입니다. 결제 프로젝트에서 오류를 해결했습니다.",
+      "normal",
+      60,
+    );
+
+    expect(result?.structureChecks).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: "identity", evidence: "저는 웹 개발자입니다." }),
+        expect.objectContaining({ id: "experience", evidence: "결제 프로젝트에서 오류를 해결했습니다." }),
+        expect.objectContaining({ id: "outcome", evidence: "결제 프로젝트에서 오류를 해결했습니다." }),
+      ]),
+    );
+  });
+
+  it("distinguishes filler phrases from longer words and accepts common particles", () => {
+    const result = analyzeIntroduction("사실상 같은 뜻입니다. 사실은 다시 확인했습니다.", "normal", 60);
+
+    expect(result?.fillerPhrases).toEqual([{ phrase: "사실", count: 1, indices: [13] }]);
+  });
+
+  it("normalizes common Korean particles when finding repeated words", () => {
+    const result = analyzeIntroduction(
+      "프로젝트에서 배웠습니다. 프로젝트를 개선했습니다. 프로젝트는 완료됐습니다.",
+      "normal",
+      60,
+    );
+
+    expect(result?.repeatedWords).toContainEqual({ word: "프로젝트", count: 3 });
   });
 
   it("splits punctuation and line breaks into sentences", () => {

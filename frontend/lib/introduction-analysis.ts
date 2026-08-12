@@ -31,6 +31,7 @@ export interface StructureCheck {
   label: string;
   description: string;
   met: boolean;
+  evidence: string | null;
 }
 
 export interface IntroductionAction {
@@ -78,30 +79,39 @@ const repeatedWordStopWords = new Set([
   "통해",
 ]);
 
-const structureDefinitions: Array<Omit<StructureCheck, "met"> & { pattern: RegExp }> = [
+const structureDefinitions: Array<Omit<StructureCheck, "met" | "evidence"> & { patterns: RegExp[] }> = [
   {
     id: "identity",
     label: "자기 정의",
     description: "역할, 직무 또는 자신을 설명하는 문장이 있는지 확인합니다.",
-    pattern: /(저는|나는|제가|저의|제 역할|제 직무|전공|개발자|기획자|디자이너|마케터|엔지니어)/,
+    patterns: [
+      /(개발자|기획자|디자이너|마케터|엔지니어|연구원|관리자|컨설턴트|디렉터|교사|강사|학생|취업s*준비생)/,
+      /(제s*(?:역할|직무|전공)|역할을s*맡|업무를s*담당|일을s*하고s*있)/,
+    ],
   },
   {
     id: "experience",
     label: "경험 근거",
     description: "주장을 뒷받침하는 경험이나 행동이 있는지 확인합니다.",
-    pattern: /(경험|프로젝트|업무|담당|진행|수행|근무|활동|개발(?:했|한|하며|하고|해|을|된| 중)|기획(?:했|한|하며|하고|해|을|된| 중)|운영(?:했|한|하며|하고|해|을|된| 중)|해결)/,
+    patterns: [
+      /(경험|프로젝트|업무|담당|진행|수행|근무|활동)/,
+      /(개발|기획|운영|분석|설계|정리|구현|해결)(?:했|한|하며|하고|해|을|된| 중)/,
+    ],
   },
   {
     id: "outcome",
     label: "결과 또는 성과",
     description: "숫자나 변화처럼 확인 가능한 결과가 있는지 확인합니다.",
-    pattern: /(\d[\d,.]*\s*(?:%|명|개|건|회|배|원|개월|년|일|시간|분)|성과|결과|개선|증가|감소|달성|절감|수상|기여)/,
+    patterns: [
+      /\d[\d,.]*\s*(?:%|명|개|건|회|배|원|개월|년|일|시간|분)/,
+      /(성과|결과|개선했|개선해|개선하여|증가했|감소했|달성했|절감했|수상했|줄였|높였|단축했|해결했)/,
+    ],
   },
   {
     id: "closing",
     label: "마무리",
     description: "지원 목적, 기여 방향 또는 분명한 결론이 있는지 확인합니다.",
-    pattern: /(기여하겠습니다|하겠습니다|되고 싶습니다|목표입니다|지원했습니다|잘 부탁드립니다|감사합니다|강점입니다)[.!?。！？]?\s*$/,
+    patterns: [/(기여하겠습니다|하겠습니다|되고 싶습니다|목표입니다|지원했습니다|잘 부탁드립니다|감사합니다|강점입니다)[.!?。！？]?\s*$/],
   },
 ];
 
@@ -111,6 +121,62 @@ const structureActionTitles: Record<StructureCheckId, string> = {
   outcome: "결과 또는 성과를 한 문장으로 보완하세요",
   closing: "마무리를 한 문장으로 보완하세요",
 };
+
+const fillerPhraseParticleSuffixes = ["에게는", "에서는", "으로는", "에게", "에서", "으로", "은", "는", "이", "가", "을", "를", "도", "만"];
+const repeatedWordSuffixes = [
+  "으로부터",
+  "에게서는",
+  "에서는",
+  "에게서",
+  "으로는",
+  "으로",
+  "에서",
+  "에게",
+  "한테",
+  "부터",
+  "까지",
+  "처럼",
+  "보다",
+  "하고",
+  "이며",
+  "이고",
+  "은",
+  "는",
+  "이",
+  "가",
+  "을",
+  "를",
+  "도",
+  "만",
+  "과",
+  "와",
+  "의",
+  "에",
+  "로",
+] as const;
+
+function isLetterOrNumber(value: string | undefined): boolean {
+  return value ? /[\p{L}\p{N}]/u.test(value) : false;
+}
+
+function hasPhraseBoundary(source: string, index: number, phrase: string): boolean {
+  if (isLetterOrNumber(source[index - 1])) {
+    return false;
+  }
+
+  const endIndex = index + phrase.length;
+  if (!isLetterOrNumber(source[endIndex])) {
+    return true;
+  }
+
+  return fillerPhraseParticleSuffixes.some((suffix) => {
+    if (!source.startsWith(suffix, endIndex)) {
+      return false;
+    }
+
+    return !isLetterOrNumber(source[endIndex + suffix.length]);
+  });
+}
 
 function findAllIndices(source: string, phrase: string): number[] {
   const indices: number[] = [];
@@ -122,7 +188,9 @@ function findAllIndices(source: string, phrase: string): number[] {
       break;
     }
 
-    indices.push(index);
+    if (hasPhraseBoundary(source, index, phrase)) {
+      indices.push(index);
+    }
     startIndex = index + phrase.length;
   }
 
@@ -135,6 +203,16 @@ function splitSentences(source: string): string[] {
 
 function countVisibleCharacters(source: string): number {
   return Array.from(source.replace(/\s/g, "")).length;
+}
+
+function findStructureEvidence(source: string, patterns: RegExp[]): string | null {
+  for (const sentence of splitSentences(source)) {
+    if (patterns.some((pattern) => pattern.test(sentence))) {
+      return sentence;
+    }
+  }
+
+  return null;
 }
 
 function findFillerPhrases(source: string): PhraseFinding[] {
@@ -150,6 +228,12 @@ function findRepeatedWords(source: string): RepeatedWordFinding[] {
     .toLocaleLowerCase("ko-KR")
     .split(/\s+/)
     .map((word) => word.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, ""))
+    .map((word) => {
+      const suffix = repeatedWordSuffixes.find(
+        (candidate) => word.endsWith(candidate) && word.length - candidate.length >= 2,
+      );
+      return suffix ? word.slice(0, -suffix.length) : word;
+    })
     .filter((word) => word.length >= 2 && !repeatedWordStopWords.has(word));
 
   for (const word of words) {
@@ -188,10 +272,14 @@ export function analyzeIntroduction(
     longSentences: sentenceFindings.filter((sentence) => sentence.characterCount >= 55),
     fillerPhrases: findFillerPhrases(script),
     repeatedWords: findRepeatedWords(script),
-    structureChecks: structureDefinitions.map(({ pattern, ...definition }) => ({
-      ...definition,
-      met: pattern.test(script),
-    })),
+    structureChecks: structureDefinitions.map(({ patterns, ...definition }) => {
+      const evidence = findStructureEvidence(script, patterns);
+      return {
+        ...definition,
+        met: evidence !== null,
+        evidence,
+      };
+    }),
   };
 }
 
