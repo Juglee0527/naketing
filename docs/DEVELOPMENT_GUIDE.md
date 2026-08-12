@@ -110,7 +110,7 @@ Tool은 다음 케이스를 검증합니다.
 
 ## Naketing 광고 수익화 구현 계획
 
-이 절은 아직 구현되지 않은 `frontend` 수익화 작업의 순서와 검증 기준입니다. 현재 기능 설명으로 해석하지 않습니다. 제품 범위와 광고 정책은 `PRODUCT_REQUIREMENTS.md`의 Naketing 섹션을 우선합니다.
+이 절은 `frontend` 수익화 작업의 현재 구현 기준과 남은 순서입니다. 제품 범위와 광고 정책은 `PRODUCT_REQUIREMENTS.md`의 Naketing 섹션을 우선합니다.
 
 ### 1. 수익화 기반
 
@@ -122,13 +122,15 @@ Tool은 다음 케이스를 검증합니다.
 
 ### 2. Guides
 
-구현 목표는 `frontend/content/guides/*.md`를 build 시 읽어 `/guides`와 `/guides/[slug]`를 생성하는 것입니다.
+`frontend/content/guides/*.md`를 build 시 읽어 `/guides`와 `/guides/[slug]`를 생성합니다.
 
 - 기존 Developer Site Blog 코드를 앱 간 import하지 않습니다.
 - 현재 요구 범위에서는 Backend, DB와 관리자 CRUD를 추가하지 않습니다.
 - metadata, 날짜와 slug를 build 시 검증합니다.
 - 목록, 상세 metadata, sitemap과 없는 slug의 404 처리를 함께 확인합니다.
 - 원본 콘텐츠 10개는 AdSense 신청 전 프로젝트 내부 준비 기준이며 Google의 공식 최소 수량으로 표현하지 않습니다.
+
+Guide를 추가할 때는 `title`, `description`, 실제 `YYYY-MM-DD` 날짜, 한 개 이상의 `tags`, kebab-case `slug`를 frontmatter에 입력합니다. 빈 본문, 잘못된 날짜와 slug, 중복 slug는 build 오류로 처리합니다.
 
 ### 3. Naketing 무료 Tools
 

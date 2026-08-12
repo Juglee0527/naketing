@@ -36,6 +36,9 @@ export default function RootLayout({
 
                     {/* 메뉴 */}
                     <div className="flex w-full flex-wrap items-center gap-x-4 gap-y-2 text-xs text-zinc-300 sm:w-auto sm:flex-nowrap sm:gap-5 sm:text-sm">
+                        <Link href="/guides" className="hover:text-violet-300">
+                            가이드
+                        </Link>
                         <Link href="/start" className="hover:text-violet-300">
                             시작하기
                         </Link>
