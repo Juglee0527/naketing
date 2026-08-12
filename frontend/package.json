@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "verify:review": "node scripts/verify-review.mjs"
   },
   "dependencies": {
     "next": "16.3.0",

@@ -145,6 +145,14 @@ Guide를 추가할 때는 `title`, `description`, 실제 `YYYY-MM-DD` 날짜, �
 
 다음 항목을 모두 확인한 뒤 사이트 심사를 요청합니다.
 
+저장소에서 자동 확인 가능한 항목은 `frontend`에서 다음 한 명령으로 검증합니다.
+
+```powershell
+npm.cmd run verify:review
+```
+
+이 명령은 단위 테스트, lint, production build, 공개 route, sitemap과 robots, 대표 metadata와 JSON-LD, 공유 이미지, 제거 route 및 publisher ID 유무에 따른 AdSense 스크립트 경계를 순서대로 확인합니다.
+
 - 사용자에게 노출되는 준비 중 placeholder와 설명되지 않은 TODO가 없습니다.
 - 개인정보 처리방침과 문의 방법이 공개되어 있습니다.
 - 원본 Guide가 10개 이상이고 무료 Tool이 2개 이상입니다.
@@ -240,9 +248,9 @@ git diff --check
 
 1. 해당 앱의 `package-lock.json`을 기준으로 npm cache를 준비합니다.
 2. `npm ci`로 lockfile과 일치하는 의존성을 설치합니다.
-3. `frontend` job에서 `npm run test`를 실행합니다.
-4. `npm run lint`를 실행합니다.
-5. `npm run build`를 실행합니다.
+3. `frontend` job에서는 `npm run verify:review`로 테스트, lint, build와 심사 전 정적 게이트를 한 번에 실행합니다.
+4. `developer-site` job에서는 `npm run lint`를 실행합니다.
+5. `developer-site` job에서는 `npm run build`를 실행합니다.
 
 한 앱의 실패가 다른 앱의 검증 결과를 숨기지 않도록 matrix의 `fail-fast`는 비활성화합니다. CI 통과는 브라우저 수동 검증이나 향후 추가될 자동 테스트를 대체하지 않습니다.
 

@@ -35,15 +35,17 @@ jobs:
         working-directory: ${{ matrix.app }}
         run: npm ci
 
-      - name: Test frontend
+      - name: Verify frontend review gate
         if: matrix.app == 'frontend'
         working-directory: frontend
-        run: npm run test
+        run: npm run verify:review
 
-      - name: Lint
+      - name: Lint developer site
+        if: matrix.app == 'developer-site'
         working-directory: ${{ matrix.app }}
         run: npm run lint
 
-      - name: Build
+      - name: Build developer site
+        if: matrix.app == 'developer-site'
         working-directory: ${{ matrix.app }}
         run: npm run build

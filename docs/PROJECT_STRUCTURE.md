@@ -13,6 +13,7 @@ naketing/
 │  ├─ content/guides/         # 빌드 입력용 말하기 Guide Markdown
 │  ├─ lib/                   # Guide 파싱과 Naketing 정적 데이터
 │  ├─ public/
+│  ├─ scripts/                # 심사 전 자동 검증 스크립트
 │  ├─ package.json
 │  └─ next.config.ts
 ├─ developer-site/           # dev.naketing.co.kr 개발자 사이트
