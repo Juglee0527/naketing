@@ -2,13 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { IntroductionProgramResult } from "@/components/introduction-program-result";
 import {
   analyzeIntroduction,
   type IntroductionAnalysisResult,
-  type LengthStatus,
   type TargetDuration,
 } from "@/lib/introduction-analysis";
-import { formatSpeechDuration, paceDefinitions, type SpeechPace } from "@/lib/speech-time";
+import { paceDefinitions, type SpeechPace } from "@/lib/speech-time";
 
 type ProgramStep = 1 | 2 | 3;
 type IntroductionSituation = "interview" | "presentation" | "networking" | "general";
@@ -57,18 +57,6 @@ const targetLabels: Record<TargetDuration, string> = {
   30: "30초",
   60: "1분",
   180: "3분",
-};
-
-const lengthStatusLabels: Record<LengthStatus, string> = {
-  short: "목표보다 짧습니다",
-  appropriate: "목표 시간에 적절합니다",
-  long: "목표보다 깁니다",
-};
-
-const lengthStatusColors: Record<LengthStatus, string> = {
-  short: "text-amber-300",
-  appropriate: "text-emerald-300",
-  long: "text-red-300",
 };
 
 export function IntroductionProgram() {
@@ -329,65 +317,13 @@ export function IntroductionProgram() {
               자기소개 점검 결과
             </h2>
 
-            <div className="mt-6 rounded-xl border border-violet-500/40 bg-violet-500/10 p-5 sm:p-6">
-              <p className={`text-sm font-semibold ${lengthStatusColors[result.lengthStatus]}`}>
-                {lengthStatusLabels[result.lengthStatus]}
-              </p>
-              <p className="mt-2 text-3xl font-bold">{formatSpeechDuration(result.totalSeconds)}</p>
-              <p className="mt-2 text-sm text-zinc-400">
-                목표 {targetLabels[targetSeconds]} · 적정 글자 수 {result.minimumCharacters}~{result.maximumCharacters}자
-              </p>
-            </div>
-
-            <dl className="mt-5 grid gap-3 sm:grid-cols-3">
-              <div className="rounded-xl border border-zinc-800 bg-zinc-950/60 p-4">
-                <dt className="text-xs text-zinc-500">공백 제외 글자 수</dt>
-                <dd className="mt-2 text-xl font-semibold">{result.characterCount}자</dd>
-              </div>
-              <div className="rounded-xl border border-zinc-800 bg-zinc-950/60 p-4">
-                <dt className="text-xs text-zinc-500">문장 수</dt>
-                <dd className="mt-2 text-xl font-semibold">{result.sentenceCount}개</dd>
-              </div>
-              <div className="rounded-xl border border-zinc-800 bg-zinc-950/60 p-4">
-                <dt className="text-xs text-zinc-500">평균 문장 길이</dt>
-                <dd className="mt-2 text-xl font-semibold">{result.averageSentenceCharacters}자</dd>
-              </div>
-            </dl>
-
-            <div className="mt-7">
-              <h3 className="text-lg font-semibold">구조 점검</h3>
-              <ul className="mt-3 grid gap-3 sm:grid-cols-2">
-                {result.structureChecks.map((check) => (
-                  <li className="rounded-xl border border-zinc-800 bg-zinc-950/60 p-4" key={check.id}>
-                    <p className={`text-sm font-semibold ${check.met ? "text-emerald-300" : "text-amber-300"}`}>
-                      {check.met ? "✓ 확인됨" : "△ 보완 필요"} · {check.label}
-                    </p>
-                    <p className="mt-2 text-xs leading-5 text-zinc-500">{check.description}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="mt-7 flex flex-wrap gap-3">
-              <button
-                className="rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-500"
-                type="button"
-                onClick={() => setStep(2)}
-              >
-                원고 수정하기
-              </button>
-              <button
-                className="rounded-xl border border-zinc-700 px-5 py-2.5 text-sm font-semibold text-zinc-200 hover:bg-zinc-800"
-                type="button"
-                onClick={resetProgram}
-              >
-                처음부터 다시 하기
-              </button>
-            </div>
-
-            <p className="mt-6 text-xs leading-5 text-zinc-500">
-              이 결과는 문장과 표현을 규칙으로 확인한 참고 자료입니다. 의미, 사실관계나 전달력을 AI로 평가한 결과가 아닙니다.
-            </p>
+            <IntroductionProgramResult
+              result={result}
+              script={script}
+              targetLabel={targetLabels[targetSeconds]}
+              onEdit={() => setStep(2)}
+              onReset={resetProgram}
+            />
           </section>
         )}
       </div>

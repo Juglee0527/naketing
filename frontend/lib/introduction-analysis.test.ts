@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { analyzeIntroduction } from "./introduction-analysis";
+import { analyzeIntroduction, getIntroductionActions } from "./introduction-analysis";
 
 describe("analyzeIntroduction", () => {
   it("returns null for an empty script", () => {
@@ -62,5 +62,21 @@ describe("analyzeIntroduction", () => {
 
     expect(result?.sentenceCount).toBe(3);
     expect(result?.averageSentenceCharacters).toBeGreaterThan(0);
+  });
+
+  it("builds concrete revision actions from the findings", () => {
+    const script = "저는 그냥 개발자 개발자 개발자 입니다.";
+    const result = analyzeIntroduction(script, "normal", 60);
+
+    expect(result).not.toBeNull();
+    expect(getIntroductionActions(result!)).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: "length-short" }),
+        expect.objectContaining({ id: "filler" }),
+        expect.objectContaining({ id: "repetition" }),
+        expect.objectContaining({ id: "structure-experience" }),
+        expect.objectContaining({ id: "read-aloud" }),
+      ]),
+    );
   });
 });

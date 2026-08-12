@@ -32,6 +32,12 @@ export interface StructureCheck {
   met: boolean;
 }
 
+export interface IntroductionAction {
+  id: string;
+  title: string;
+  description: string;
+}
+
 export interface IntroductionAnalysisResult extends SpeechTimeResult {
   targetSeconds: TargetDuration;
   toleranceSeconds: number;
@@ -87,7 +93,7 @@ const structureDefinitions: Array<Omit<StructureCheck, "met"> & { pattern: RegEx
     id: "experience",
     label: "경험 근거",
     description: "주장을 뒷받침하는 경험이나 행동이 있는지 확인합니다.",
-    pattern: /(경험|프로젝트|업무|담당|진행|수행|근무|활동|개발|기획|운영|해결)/,
+    pattern: /(경험|프로젝트|업무|담당|진행|수행|근무|활동|개발(?:했|한|하며|하고|해|을|된| 중)|기획(?:했|한|하며|하고|해|을|된| 중)|운영(?:했|한|하며|하고|해|을|된| 중)|해결)/,
   },
   {
     id: "outcome",
@@ -102,6 +108,13 @@ const structureDefinitions: Array<Omit<StructureCheck, "met"> & { pattern: RegEx
     pattern: /(기여하겠습니다|하겠습니다|되고 싶습니다|목표입니다|지원했습니다|잘 부탁드립니다|감사합니다|강점입니다)[.!?。！？]?\s*$/,
   },
 ];
+
+const structureActionTitles: Record<StructureCheckId, string> = {
+  identity: "자기 정의를 한 문장으로 보완하세요",
+  experience: "경험 근거를 한 문장으로 보완하세요",
+  outcome: "결과 또는 성과를 한 문장으로 보완하세요",
+  closing: "마무리를 한 문장으로 보완하세요",
+};
 
 function findAllIndices(source: string, phrase: string): number[] {
   const indices: number[] = [];
@@ -201,4 +214,63 @@ export function analyzeIntroduction(
       met: pattern.test(script),
     })),
   };
+}
+
+export function getIntroductionActions(result: IntroductionAnalysisResult): IntroductionAction[] {
+  const actions: IntroductionAction[] = [];
+
+  if (result.lengthStatus === "long") {
+    actions.push({
+      id: "length-long",
+      title: "핵심과 직접 연결되지 않는 문장을 줄이세요",
+      description: `목표보다 약 ${result.differenceSeconds}초 깁니다. ${result.maximumCharacters}자 안쪽을 기준으로 반복 설명부터 덜어보세요.`,
+    });
+  } else if (result.lengthStatus === "short") {
+    actions.push({
+      id: "length-short",
+      title: "주장을 뒷받침할 근거를 보완하세요",
+      description: `목표보다 약 ${Math.abs(result.differenceSeconds)}초 짧습니다. 경험에서 직접 한 행동이나 결과를 한 문장 추가해 보세요.`,
+    });
+  }
+
+  if (result.fillerPhrases.length > 0) {
+    const count = result.fillerPhrases.reduce((sum, finding) => sum + finding.count, 0);
+    actions.push({
+      id: "filler",
+      title: "점검 후보 표현을 문장에서 빼고 다시 읽어보세요",
+      description: `${count}곳이 표시됐습니다. 표현을 빼도 뜻이 유지되면 삭제하고, 필요한 경우 더 구체적인 말로 바꾸세요.`,
+    });
+  }
+
+  if (result.repeatedWords.length > 0) {
+    actions.push({
+      id: "repetition",
+      title: "같은 단어가 가까이 반복되는지 확인하세요",
+      description: `반복이 많은 단어는 ${result.repeatedWords.map((finding) => `${finding.word} ${finding.count}회`).join(", ")}입니다. 꼭 필요한 반복만 남겨보세요.`,
+    });
+  }
+
+  if (result.longSentences.length > 0) {
+    actions.push({
+      id: "sentence-length",
+      title: "긴 문장을 핵심과 근거로 나누세요",
+      description: `공백 제외 55자 이상 문장이 ${result.longSentences.length}개 있습니다. 접속어 앞이나 행동과 결과 사이에서 문장을 나눠보세요.`,
+    });
+  }
+
+  for (const check of result.structureChecks.filter((item) => !item.met)) {
+    actions.push({
+      id: `structure-${check.id}`,
+      title: structureActionTitles[check.id],
+      description: check.description,
+    });
+  }
+
+  actions.push({
+    id: "read-aloud",
+    title: "마지막으로 소리 내어 읽어보세요",
+    description: "쉼, 강조와 발음 습관은 글자 수만으로 확인할 수 없습니다. 실제로 읽으며 어색한 호흡을 표시하세요.",
+  });
+
+  return actions;
 }
