@@ -108,6 +108,61 @@ Tool은 다음 케이스를 검증합니다.
 - Clear 이후 상태 초기화
 - 모바일 레이아웃
 
+## Naketing 광고 수익화 구현 계획
+
+이 절은 아직 구현되지 않은 `frontend` 수익화 작업의 순서와 검증 기준입니다. 현재 기능 설명으로 해석하지 않습니다. 제품 범위와 광고 정책은 `PRODUCT_REQUIREMENTS.md`의 Naketing 섹션을 우선합니다.
+
+### 1. 수익화 기반
+
+1. 홈과 소개 화면의 AI 관련 표현이 실제 구현 상태와 일치하는지 확인합니다.
+2. 개인정보 처리방침과 문의 route를 추가하고 Footer에서 접근 가능하게 합니다.
+3. 주요 route별 metadata, canonical과 Open Graph를 추가합니다.
+4. `frontend`용 sitemap과 robots를 생성합니다.
+5. Home, 시작하기, 회사소개, 대표소개와 프로그램 소개는 초기 광고 제외 대상으로 유지합니다.
+
+### 2. Guides
+
+구현 목표는 `frontend/content/guides/*.md`를 build 시 읽어 `/guides`와 `/guides/[slug]`를 생성하는 것입니다.
+
+- 기존 Developer Site Blog 코드를 앱 간 import하지 않습니다.
+- 현재 요구 범위에서는 Backend, DB와 관리자 CRUD를 추가하지 않습니다.
+- metadata, 날짜와 slug를 build 시 검증합니다.
+- 목록, 상세 metadata, sitemap과 없는 slug의 404 처리를 함께 확인합니다.
+- 원본 콘텐츠 10개는 AdSense 신청 전 프로젝트 내부 준비 기준이며 Google의 공식 최소 수량으로 표현하지 않습니다.
+
+### 3. Naketing 무료 Tools
+
+- Tool 목록과 상세 route는 `frontend` 안에서 관리합니다.
+- 서버가 필요 없는 입력과 변환은 브라우저 내부에서 처리합니다.
+- 규칙 기반 결과를 AI 분석이라고 표시하지 않습니다.
+- 정상, 빈값, 잘못된 입력, 경계값, Clear와 모바일 레이아웃을 확인합니다.
+- 광고는 입력, 변환, Copy 버튼과 충분히 떨어진 결과 하단에만 배치할 수 있습니다.
+
+### 4. AdSense 신청 전 게이트
+
+다음 항목을 모두 확인한 뒤 사이트 심사를 요청합니다.
+
+- 사용자에게 노출되는 준비 중 placeholder와 설명되지 않은 TODO가 없습니다.
+- 개인정보 처리방침과 문의 방법이 공개되어 있습니다.
+- 원본 Guide가 10개 이상이고 무료 Tool이 2개 이상입니다.
+- sitemap과 robots가 `naketing.co.kr` 기준으로 생성됩니다.
+- Search Console의 sitemap 제출과 주요 경로 색인은 외부 화면에서 직접 확인합니다.
+- 실제 AdSense publisher ID가 준비되어 있으며 중복 계정 여부를 사용자가 확인합니다.
+- `frontend`의 lint와 production build가 성공합니다.
+- 주요 route를 모바일과 데스크톱에서 수동 확인합니다.
+
+### 5. 승인 후 광고 적용
+
+1. Guide 본문 하단과 Tool 결과 하단에 수동 광고 단위를 적용합니다.
+2. 실제 publisher ID로 `frontend/public/ads.txt`를 생성합니다.
+3. 적용 지역의 동의 요건에 맞게 AdSense 계정에서 인증 CMP를 설정합니다.
+4. 광고와 콘텐츠 또는 동작 버튼이 혼동되지 않는지 확인합니다.
+5. 광고 공간으로 인한 layout shift와 모바일 화면 가림을 확인합니다.
+6. 30일 동안 검색 유입, 광고 노출, 페이지 RPM, Core Web Vitals와 이탈 변화를 기록합니다.
+7. Auto Ads는 수동 배치 기준선이 생긴 뒤 별도 실험으로만 검토합니다.
+
+AdSense 계정 생성, 약관 동의, 신원·주소·세금·지급 정보 등록, 사이트 심사 요청과 CMP 계정 설정은 저장소만으로 완료할 수 없는 사용자 작업입니다. 저장소 증거 없이 완료로 기록하지 않습니다.
+
 ## 검증
 
 현재 자동 테스트 스크립트는 없습니다. 코드 변경 시 영향받은 앱에서 lint와 production build를 실행합니다.

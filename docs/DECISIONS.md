@@ -126,3 +126,33 @@ AI가 코드만으로 제품 요구사항과 구조 결정의 이유를 모두 �
 - 요구사항과 코드 변경 시 관련 문서를 같은 작업에서 갱신합니다.
 - 코드 내용을 그대로 복제하는 문서는 만들지 않습니다.
 - 작은 규칙마다 새 파일을 만들지 않고 현재 중앙 문서에 섹션을 추가합니다.
+
+## D-006: 광고 수익화 대상은 Naketing 서비스로 한정
+
+- 상태: 채택
+- 결정일: 2026-08-12
+
+### 배경
+
+같은 저장소에는 서비스인 `naketing.co.kr`과 개발자 포트폴리오인 `dev.naketing.co.kr`이 함께 있습니다. Developer Site 문서에 있던 AdSense 계획은 두 사이트의 역할을 혼동한 것이며, 사용자의 수익화 목표는 기존 Naketing 서비스입니다.
+
+### 결정
+
+Google AdSense 광고 수익화 대상은 `frontend`가 제공하는 `naketing.co.kr`로 한정합니다. `developer-site`가 제공하는 `dev.naketing.co.kr`은 광고 없는 개발자 포트폴리오로 유지합니다.
+
+Naketing은 소개 화면에 광고를 바로 추가하지 않고, 말하기·자기소개·퍼스널 브랜딩 Guides와 무료 Tools를 먼저 제공한 뒤 원본 콘텐츠가 있는 화면에만 광고를 적용합니다.
+
+### 이유
+
+- Naketing의 서비스 주제와 검색 콘텐츠 및 무료 Tool을 하나의 사용자 흐름으로 연결할 수 있습니다.
+- Developer Site의 개인 포트폴리오 목적과 Naketing의 수익화 목적을 분리합니다.
+- 콘텐츠가 부족한 소개 화면에 광고만 추가하는 구조를 피합니다.
+- 광고가 Home과 서비스 CTA의 신뢰도와 전환 흐름을 방해하지 않도록 합니다.
+
+### 결과
+
+- Naketing 수익화 기능과 콘텐츠는 `frontend` 안에 구현합니다.
+- Developer Site의 Blog, Tools와 광고 코드를 Naketing에 직접 import하거나 shared package로 묶지 않습니다.
+- Home, 시작하기, 회사소개, 대표소개와 프로그램 소개는 초기 광고 제외 화면입니다.
+- Guide와 무료 Tool, 개인정보 안내, SEO와 색인 준비가 완료된 뒤 AdSense 심사를 요청합니다.
+- 실제 publisher ID, 계정 승인, Search Console 색인과 CMP 설정은 외부에서 확인하기 전까지 완료로 표현하지 않습니다.

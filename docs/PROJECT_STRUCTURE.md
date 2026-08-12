@@ -77,7 +77,9 @@ naketing/
 - Projects
 - About
 - 검색 노출을 위한 metadata, sitemap, robots
-- 향후 AdSense 삽입 경계
+- 광고 없는 개발자 포트폴리오 운영
+
+현재 코드의 `AdSlot`은 광고 요청을 만들지 않는 빈 placeholder입니다. 광고 수익화 기능은 Developer Site가 아니라 `frontend`에 구현할 계획이며, 아직 현재 구조에는 추가되지 않았습니다.
 
 ### 현재 route
 
