@@ -46,7 +46,7 @@ Naketing의 현재 수익화 목표는 `naketing.co.kr`에 말하기·자기소�
 
 ### Guides
 
-Guides는 Naketing 주제에 맞는 검색 유입과 광고 게재 기반을 만드는 원본 콘텐츠입니다. 목록, 정적 상세 경로, Markdown 파싱과 첫 원본 Guide가 구현됐으며 초기 콘텐츠 확장은 진행 중입니다.
+Guides는 Naketing 주제에 맞는 검색 유입과 광고 게재 기반을 만드는 원본 콘텐츠입니다. 목록, 정적 상세 경로와 Markdown 파싱이 구현됐으며 원본 Guide 4개가 등록돼 있습니다. AdSense 신청 전 내부 기준인 10개까지 콘텐츠 확장을 진행합니다.
 
 - 목록: `/guides`
 - 상세: `/guides/[slug]`
