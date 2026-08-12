@@ -130,6 +130,25 @@ export function getGuideBySlug(slug: string): Guide | undefined {
   return getAllGuides().find((guide) => guide.slug === slug);
 }
 
+export function getRelatedGuides(guide: GuideMetadata, limit = 2): Guide[] {
+  if (limit <= 0) {
+    return [];
+  }
+
+  return getAllGuides()
+    .filter((candidate) => candidate.slug !== guide.slug)
+    .map((candidate) => ({
+      guide: candidate,
+      sharedTagCount: candidate.tags.filter((tag) => guide.tags.includes(tag)).length,
+    }))
+    .sort(
+      (left, right) =>
+        right.sharedTagCount - left.sharedTagCount || right.guide.date.localeCompare(left.guide.date),
+    )
+    .slice(0, limit)
+    .map((candidate) => candidate.guide);
+}
+
 export function formatGuideDate(date: string): string {
   const [year, month, day] = date.split("-").map(Number);
   return `${year}년 ${month}월 ${day}일`;

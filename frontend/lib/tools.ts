@@ -82,3 +82,10 @@ export const tools: readonly ToolDefinition[] = [
 export function getTool(slug: string): ToolDefinition | undefined {
   return tools.find((tool) => tool.slug === slug);
 }
+
+export function getRelatedToolForGuide(tags: readonly string[]): ToolDefinition {
+  const introductionKeywords = ["자기소개", "면접", "지원동기", "강점", "경력직"];
+  const isIntroductionGuide = tags.some((tag) => introductionKeywords.some((keyword) => tag.includes(keyword)));
+
+  return isIntroductionGuide ? tools[1] : tools[0];
+}
