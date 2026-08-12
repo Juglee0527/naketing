@@ -35,6 +35,11 @@ jobs:
         working-directory: ${{ matrix.app }}
         run: npm ci
 
+      - name: Test frontend
+        if: matrix.app == 'frontend'
+        working-directory: frontend
+        run: npm run test
+
       - name: Lint
         working-directory: ${{ matrix.app }}
         run: npm run lint

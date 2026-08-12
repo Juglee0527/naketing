@@ -192,7 +192,7 @@ NEXT_PUBLIC_GOOGLE_ADSENSE_PUBLISHER_ID=실제 AdSense publisher ID
 
 ## 검증
 
-현재 자동 테스트 스크립트는 없습니다. 코드 변경 시 영향받은 앱에서 lint와 production build를 실행합니다.
+`frontend`는 자기소개 점검과 콘텐츠 연결 규칙을 Vitest 단위 테스트로 검증합니다. `developer-site`에는 자동 테스트 스크립트가 없습니다. 코드 변경 시 영향받은 앱의 테스트가 있으면 먼저 실행하고 lint와 production build를 실행합니다.
 
 ```powershell
 npm.cmd run lint
@@ -203,6 +203,7 @@ npm.cmd run build
 
 ```powershell
 cd frontend
+npm.cmd run test
 npm.cmd run lint
 npm.cmd run build
 ```
@@ -239,8 +240,9 @@ git diff --check
 
 1. 해당 앱의 `package-lock.json`을 기준으로 npm cache를 준비합니다.
 2. `npm ci`로 lockfile과 일치하는 의존성을 설치합니다.
-3. `npm run lint`를 실행합니다.
-4. `npm run build`를 실행합니다.
+3. `frontend` job에서 `npm run test`를 실행합니다.
+4. `npm run lint`를 실행합니다.
+5. `npm run build`를 실행합니다.
 
 한 앱의 실패가 다른 앱의 검증 결과를 숨기지 않도록 matrix의 `fail-fast`는 비활성화합니다. CI 통과는 브라우저 수동 검증이나 향후 추가될 자동 테스트를 대체하지 않습니다.
 
