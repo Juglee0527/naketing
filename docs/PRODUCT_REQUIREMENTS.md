@@ -77,6 +77,7 @@ Google AdSense 신청 전 내부 준비 기준은 원본 Guide 10개 이상입�
 
 - 주요 페이지에 title, description, canonical URL과 Open Graph를 제공합니다.
 - Guides와 Tools의 정적 경로를 sitemap에 포함하고 robots에서 sitemap 위치를 안내합니다.
+- canonical과 sitemap의 기본 공개 origin은 실제 운영 응답 기준인 `https://www.naketing.co.kr`입니다. 다른 공개 origin으로 build할 때만 `NEXT_PUBLIC_SITE_URL`로 override합니다.
 - Search Console 연결과 색인 상태는 외부 계정에서 실제 확인하기 전까지 완료로 표현하지 않습니다.
 - 광고 적용 전에 개인정보 처리방침과 문의 방법을 공개합니다.
 - 개인정보 처리방침에는 Google을 포함한 제3자의 광고 쿠키 사용과 사용자의 맞춤 광고 설정 방법을 안내합니다.

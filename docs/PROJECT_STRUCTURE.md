@@ -76,6 +76,10 @@ naketing/
 - `frontend/next.config.ts`에는 `output: "export"`가 없습니다.
 - 결과는 일반 Next.js production build이며 `developer-site/out`과 같은 독립 정적 export 계약을 갖지 않습니다.
 
+### SEO origin
+
+`frontend`의 canonical, sitemap과 robots 기본 origin은 운영에서 응답하는 `https://www.naketing.co.kr`입니다. 다른 공개 origin에서 build할 때만 `NEXT_PUBLIC_SITE_URL`로 override합니다. 이 값은 비밀값이 아니며 build 결과에 공개됩니다.
+
 ## `developer-site`
 
 ### 책임

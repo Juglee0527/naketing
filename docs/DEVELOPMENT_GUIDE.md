@@ -154,6 +154,14 @@ Guide를 추가할 때는 `title`, `description`, 실제 `YYYY-MM-DD` 날짜, �
 - `frontend`의 lint와 production build가 성공합니다.
 - 주요 route를 모바일과 데스크톱에서 수동 확인합니다.
 
+`frontend` SEO 변경 후에는 production build 결과에서 다음을 확인합니다.
+
+- `/sitemap.xml`에 현재 정적 route, Guide와 Tool URL이 포함됩니다.
+- `/robots.txt`가 sitemap 위치를 안내합니다.
+- canonical, sitemap과 robots의 기본 origin이 `https://www.naketing.co.kr`입니다.
+- 대표 Guide에 Article JSON-LD가 포함됩니다.
+- 다른 공개 origin에서 build할 때만 `NEXT_PUBLIC_SITE_URL`을 설정합니다.
+
 ### 5. 승인 후 광고 적용
 
 1. Guide 본문 하단과 Tool 결과 하단에 수동 광고 단위를 적용합니다.

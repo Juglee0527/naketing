@@ -1,3 +1,16 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "프로그램 소개",
+  description: "자기 설명 능력을 높이기 위해 Naketing이 준비하는 프로그램 방향을 안내합니다.",
+  alternates: { canonical: "/program" },
+  openGraph: {
+    title: "Naketing 프로그램 소개",
+    description: "자기 설명 능력을 높이기 위해 Naketing이 준비하는 프로그램 방향을 안내합니다.",
+    url: "/program",
+  },
+};
+
 export default function ProgramPage() {
   return (
       <div className="max-w-4xl mx-auto px-4 py-10 space-y-4">

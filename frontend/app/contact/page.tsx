@@ -2,8 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "문의 | Naketing",
+  title: "문의",
   description: "Naketing 서비스 관련 문의 방법을 안내합니다.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Naketing 문의",
+    description: "Naketing 서비스 관련 문의 방법을 안내합니다.",
+    url: "/contact",
+  },
 };
 
 const githubUrl = "https://github.com/Juglee0527";

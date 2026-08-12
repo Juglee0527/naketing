@@ -1,4 +1,17 @@
 // app/start/page.tsx
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "시작하기",
+    description: "Naketing이 해결하려는 문제와 앞으로 제공할 프로그램을 안내합니다.",
+    alternates: { canonical: "/start" },
+    openGraph: {
+        title: "Naketing 시작하기",
+        description: "Naketing이 해결하려는 문제와 앞으로 제공할 프로그램을 안내합니다.",
+        url: "/start",
+    },
+};
+
 export default function StartPage() {
     return (
         <div className="max-w-4xl mx-auto px-4 py-10 space-y-4">

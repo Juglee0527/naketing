@@ -30,12 +30,19 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
   const tool = getTool(slug);
 
   if (!tool) {
-    return { title: "도구를 찾을 수 없습니다 | Naketing" };
+    return { title: "도구를 찾을 수 없습니다" };
   }
 
+  const canonicalPath = `/tools/${tool.slug}`;
   return {
-    title: `${tool.name} | Naketing`,
+    title: tool.name,
     description: tool.description,
+    alternates: { canonical: canonicalPath },
+    openGraph: {
+      title: tool.name,
+      description: tool.description,
+      url: canonicalPath,
+    },
   };
 }
 

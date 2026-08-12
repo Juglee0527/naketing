@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { GuideContent } from "@/components/guide-content";
 import { formatGuideDate, getAllGuides, getGuideBySlug } from "@/lib/guides";
+import { absoluteUrl } from "@/lib/site";
 
 interface GuidePageProps {
   params: Promise<{ slug: string }>;
@@ -20,13 +21,23 @@ export async function generateMetadata({ params }: GuidePageProps): Promise<Meta
   const guide = getGuideBySlug(slug);
 
   if (!guide) {
-    return { title: "가이드를 찾을 수 없습니다 | Naketing" };
+    return { title: "가이드를 찾을 수 없습니다" };
   }
 
+  const canonicalPath = `/guides/${guide.slug}`;
   return {
-    title: `${guide.title} | Naketing`,
+    title: guide.title,
     description: guide.description,
     keywords: guide.tags,
+    alternates: { canonical: canonicalPath },
+    openGraph: {
+      type: "article",
+      title: guide.title,
+      description: guide.description,
+      url: canonicalPath,
+      publishedTime: `${guide.date}T00:00:00+09:00`,
+      tags: guide.tags,
+    },
   };
 }
 
@@ -38,8 +49,22 @@ export default async function GuidePage({ params }: GuidePageProps) {
     notFound();
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: guide.title,
+    description: guide.description,
+    datePublished: guide.date,
+    author: { "@type": "Organization", name: "Naketing" },
+    mainEntityOfPage: absoluteUrl(`/guides/${guide.slug}`),
+  };
+
   return (
     <article className="mx-auto w-full max-w-4xl px-4 py-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+      />
       <Link className="text-sm font-medium text-violet-300 hover:text-violet-200" href="/guides">
         ← 가이드 목록
       </Link>

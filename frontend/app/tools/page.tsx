@@ -4,8 +4,14 @@ import Link from "next/link";
 import { tools } from "@/lib/tools";
 
 export const metadata: Metadata = {
-  title: "무료 말하기 도구 | Naketing",
+  title: "무료 말하기 도구",
   description: "자기소개와 발표 원고를 브라우저에서 점검할 수 있는 무료 도구입니다.",
+  alternates: { canonical: "/tools" },
+  openGraph: {
+    title: "Naketing 무료 말하기 도구",
+    description: "자기소개와 발표 원고를 브라우저에서 점검할 수 있는 무료 도구입니다.",
+    url: "/tools",
+  },
 };
 
 export default function ToolsPage() {

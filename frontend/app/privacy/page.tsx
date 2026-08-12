@@ -2,8 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "개인정보 처리방침 | Naketing",
+  title: "개인정보 처리방침",
   description: "Naketing의 개인정보와 광고 관련 처리 기준을 안내합니다.",
+  alternates: { canonical: "/privacy" },
+  openGraph: {
+    title: "Naketing 개인정보 처리방침",
+    description: "Naketing의 개인정보와 광고 관련 처리 기준을 안내합니다.",
+    url: "/privacy",
+  },
 };
 
 export default function PrivacyPage() {

@@ -1,3 +1,16 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "대표소개",
+  description: "Naketing을 설계하고 개발하는 이정근을 소개합니다.",
+  alternates: { canonical: "/founder" },
+  openGraph: {
+    title: "Naketing 대표소개",
+    description: "Naketing을 설계하고 개발하는 이정근을 소개합니다.",
+    url: "/founder",
+  },
+};
+
 export default function FounderPage() {
   return (
       <div className="max-w-4xl mx-auto px-4 py-10 space-y-4">

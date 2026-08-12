@@ -1,3 +1,16 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "회사소개",
+  description: "말하기, 표현력과 브랜딩 역량을 다루는 Naketing의 서비스 방향을 소개합니다.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "Naketing 회사소개",
+    description: "말하기, 표현력과 브랜딩 역량을 다루는 Naketing의 서비스 방향을 소개합니다.",
+    url: "/about",
+  },
+};
+
 export default function AboutPage() {
   return (
       <div className="max-w-4xl mx-auto px-4 py-10 space-y-4">
