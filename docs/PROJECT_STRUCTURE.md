@@ -64,12 +64,15 @@ naketing/
 - `/contact`
 - `/guides`
 - `/guides/[slug]`
+- `/tools`
+- `/tools/[tool]`
 
 ### 렌더링과 빌드
 
 - App Router를 사용합니다.
 - 현재 페이지는 build 시 정적으로 prerender됩니다.
 - Guide 상세 경로는 `generateStaticParams`로 build 시 생성하며 정의되지 않은 slug는 404로 처리합니다.
+- Tool 상세 경로는 정적 Tool 정의와 `generateStaticParams`를 이용해 build 시 생성합니다.
 - `frontend/next.config.ts`에는 `output: "export"`가 없습니다.
 - 결과는 일반 Next.js production build이며 `developer-site/out`과 같은 독립 정적 export 계약을 갖지 않습니다.
 

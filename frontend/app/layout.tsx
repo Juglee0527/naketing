@@ -39,6 +39,9 @@ export default function RootLayout({
                         <Link href="/guides" className="hover:text-violet-300">
                             가이드
                         </Link>
+                        <Link href="/tools" className="hover:text-violet-300">
+                            도구
+                        </Link>
                         <Link href="/start" className="hover:text-violet-300">
                             시작하기
                         </Link>
