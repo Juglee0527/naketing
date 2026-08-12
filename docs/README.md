@@ -7,6 +7,7 @@
 | 문서 | 목적 | 확인 시점 |
 | --- | --- | --- |
 | [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) | 저장소 구조, 기술 스택, 앱 경계, 배포 계약 | 구조 또는 설정 변경 전 |
+| [DEPLOYMENT.md](./DEPLOYMENT.md) | 확인된 운영 상태, Vercel 연결 및 배포 후 검증 | 배포 설정 또는 도메인 변경 전 |
 | [PRODUCT_REQUIREMENTS.md](./PRODUCT_REQUIREMENTS.md) | 제품 기능, 비즈니스 규칙, 개인정보·SEO 요구사항 | 기능 개발 또는 버그 수정 전 |
 | [DEVELOPMENT_GUIDE.md](./DEVELOPMENT_GUIDE.md) | 코드 패턴, 콘텐츠 추가, 실행 및 검증 방법 | 구현과 검증 시 |
 | [DECISIONS.md](./DECISIONS.md) | 장기간 유지할 구조적 선택과 이유 | 구조를 변경하거나 재검토할 때 |
@@ -48,4 +49,3 @@ Blog 게시물은 Markdown이지만 프로젝트 설명 문서가 아니라 애�
 ## 기준 상태
 
 이 문서 세트는 2026-08-12의 저장소 상태를 기준으로 처음 작성했습니다. 버전과 스크립트의 최종 기준은 각 앱의 `package.json`입니다.
-

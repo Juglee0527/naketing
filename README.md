@@ -43,6 +43,7 @@ npm.cmd run build
 프로젝트 문서는 [`docs/README.md`](./docs/README.md)를 진입점으로 사용합니다.
 
 - [프로젝트 구조와 배포 경계](./docs/PROJECT_STRUCTURE.md)
+- [배포와 도메인 연결 가이드](./docs/DEPLOYMENT.md)
 - [제품 요구사항과 비즈니스 규칙](./docs/PRODUCT_REQUIREMENTS.md)
 - [개발 및 검증 가이드](./docs/DEVELOPMENT_GUIDE.md)
 - [주요 구조적 의사결정](./docs/DECISIONS.md)
@@ -54,4 +55,4 @@ npm.cmd run build
 
 - `frontend`는 일반 Next.js production build를 생성합니다.
 - `developer-site`는 `output: "export"`를 사용하며 `developer-site/out`에 정적 파일을 생성합니다.
-- 실제 호스팅, DNS, 자동 배포 연결 상태는 저장소만으로 확인할 수 없습니다. 자세한 내용은 [프로젝트 구조 문서](./docs/PROJECT_STRUCTURE.md#배포-상태)를 참고하세요.
+- 기존 서비스는 Vercel에서 운영 중이며 `dev.naketing.co.kr`은 아직 연결되지 않았습니다. 확인 근거와 사용자 작업은 [배포 가이드](./docs/DEPLOYMENT.md)를 참고하세요.
