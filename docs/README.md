@@ -11,6 +11,7 @@
 | [PRODUCT_REQUIREMENTS.md](./PRODUCT_REQUIREMENTS.md) | 제품 기능, 비즈니스 규칙, 개인정보·SEO 요구사항 | 기능 개발 또는 버그 수정 전 |
 | [DEVELOPMENT_GUIDE.md](./DEVELOPMENT_GUIDE.md) | 코드 패턴, 콘텐츠 추가, 실행 및 검증 방법 | 구현과 검증 시 |
 | [DECISIONS.md](./DECISIONS.md) | 장기간 유지할 구조적 선택과 이유 | 구조를 변경하거나 재검토할 때 |
+| [CHATGPT_CONTEXT_PROMPT.md](./CHATGPT_CONTEXT_PROMPT.md) | 다른 ChatGPT 대화에 전달할 제품·기술·판정 규칙 통합 프롬프트 | 새 대화 또는 외부 AI에 작업을 설명할 때 |
 
 Codex 작업 규칙은 저장소 루트의 [`AGENTS.md`](../AGENTS.md)에 있습니다. 빠른 실행 방법은 루트 [`README.md`](../README.md)에 있습니다.
 

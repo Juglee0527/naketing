@@ -55,6 +55,7 @@ npm.cmd run build
 - [제품 요구사항과 비즈니스 규칙](./docs/PRODUCT_REQUIREMENTS.md)
 - [개발 및 검증 가이드](./docs/DEVELOPMENT_GUIDE.md)
 - [주요 구조적 의사결정](./docs/DECISIONS.md)
+- [ChatGPT용 Naketing 컨텍스트 프롬프트](./docs/CHATGPT_CONTEXT_PROMPT.md)
 - [Codex 작업 지침](./AGENTS.md)
 
 `developer-site/content/blog/*.md`는 프로젝트 문서가 아니라 개발자 사이트의 게시물 데이터이므로 `docs/` 밖에서 관리합니다.
