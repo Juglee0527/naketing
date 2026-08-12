@@ -149,6 +149,19 @@ git diff --check
 
 문서 링크, 실제 파일 경로, package script와의 일치 여부를 읽어서 확인합니다. 문서 변경만으로 두 앱의 build를 반복하지 않습니다.
 
+### CI
+
+`.github/workflows/ci.yml`은 pull request와 `main` push에서 두 앱을 별도 matrix job으로 검증합니다.
+
+각 job은 Node.js 22 환경에서 다음 순서로 실행됩니다.
+
+1. 해당 앱의 `package-lock.json`을 기준으로 npm cache를 준비합니다.
+2. `npm ci`로 lockfile과 일치하는 의존성을 설치합니다.
+3. `npm run lint`를 실행합니다.
+4. `npm run build`를 실행합니다.
+
+한 앱의 실패가 다른 앱의 검증 결과를 숨기지 않도록 matrix의 `fail-fast`는 비활성화합니다. CI 통과는 브라우저 수동 검증이나 향후 추가될 자동 테스트를 대체하지 않습니다.
+
 ## 문서 변경 기준
 
 | 변경 내용 | 함께 갱신할 문서 |
@@ -160,4 +173,3 @@ git diff --check
 | 빠른 시작 또는 문서 경로 | 루트 `README.md` |
 
 구현 세부가 코드만으로 명확하면 문서를 추가하지 않습니다. 사용자가 다음 작업에서 요구사항을 재구성하는 데 필요한 규칙과 결정 이유를 우선 기록합니다.
-

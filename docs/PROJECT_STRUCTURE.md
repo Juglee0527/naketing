@@ -6,6 +6,7 @@
 
 ```text
 naketing/
+├─ .github/workflows/       # GitHub Actions CI
 ├─ frontend/                 # 기존 naketing.co.kr 서비스
 │  ├─ app/                   # App Router 페이지와 공통 layout
 │  ├─ public/
@@ -123,7 +124,8 @@ NEXT_PUBLIC_SITE_URL=https://dev.naketing.co.kr
 
 저장소에서 확인 가능한 사실은 다음과 같습니다.
 
-- GitHub Actions workflow가 없습니다.
+- GitHub Actions CI가 `frontend`, `developer-site`를 독립적으로 검증합니다.
+- 자동 배포 workflow는 없습니다.
 - `vercel.json`이 없습니다.
 - 활성 `CNAME` 파일이 없습니다.
 - `developer-site`는 정적 export가 가능합니다.
@@ -136,4 +138,3 @@ NEXT_PUBLIC_SITE_URL=https://dev.naketing.co.kr
 | --- | --- | --- | --- |
 | `naketing.co.kr` | `frontend` | `npm run build` | Next.js production build |
 | `dev.naketing.co.kr` | `developer-site` | `npm run build` | `out` 정적 파일 |
-
