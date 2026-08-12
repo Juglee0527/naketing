@@ -9,9 +9,6 @@ export const dynamic = "force-static";
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
     "",
-    "/start",
-    "/about",
-    "/founder",
     "/program",
     "/guides",
     "/tools",

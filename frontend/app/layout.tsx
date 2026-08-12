@@ -31,7 +31,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <AdSenseSiteScript />
         <div className="flex min-h-screen flex-col">
           <header className="border-b border-zinc-800 bg-zinc-950/90">
-            <nav className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between md:px-6">
+            <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6">
               <Link href="/" className="flex items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-violet-500 text-xs font-bold">
                   N
@@ -42,24 +42,15 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 </div>
               </Link>
 
-              <div className="flex w-full flex-wrap items-center gap-x-4 gap-y-2 text-xs text-zinc-300 sm:w-auto sm:flex-nowrap sm:gap-5 sm:text-sm">
+              <div className="flex shrink-0 items-center gap-3 text-xs text-zinc-300 sm:gap-5 sm:text-sm">
+                <Link href="/program" className="hover:text-violet-300">
+                  프로그램 소개
+                </Link>
                 <Link href="/guides" className="hover:text-violet-300">
                   가이드
                 </Link>
                 <Link href="/tools" className="hover:text-violet-300">
                   도구
-                </Link>
-                <Link href="/start" className="hover:text-violet-300">
-                  시작하기
-                </Link>
-                <Link href="/about" className="hover:text-violet-300">
-                  회사소개
-                </Link>
-                <Link href="/founder" className="hover:text-violet-300">
-                  대표소개
-                </Link>
-                <Link href="/program" className="hover:text-violet-300">
-                  프로그램 소개
                 </Link>
               </div>
             </nav>

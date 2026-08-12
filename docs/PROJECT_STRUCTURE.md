@@ -56,9 +56,6 @@ naketing/
 ### 현재 route
 
 - `/`
-- `/start`
-- `/about`
-- `/founder`
 - `/program`
 - `/privacy`
 - `/contact`
@@ -66,6 +63,8 @@ naketing/
 - `/guides/[slug]`
 - `/tools`
 - `/tools/[tool]`
+
+Header의 주요 메뉴는 `/program`, `/guides`, `/tools` 3개입니다. `/privacy`와 `/contact`는 Footer에서만 연결합니다.
 
 ### 렌더링과 빌드
 
