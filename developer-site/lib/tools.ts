@@ -1,4 +1,4 @@
-export type ToolSlug = "json-formatter" | "jwt-decoder";
+export type ToolSlug = "json-formatter" | "jwt-decoder" | "timestamp-converter";
 
 export interface ToolDefinition {
   slug: ToolSlug;
@@ -20,9 +20,14 @@ export const tools: readonly ToolDefinition[] = [
     description: "JWT의 Header와 Payload를 디코딩하고 만료 정보를 확인합니다.",
     privacyNote: "입력한 JWT는 서버로 전송되지 않고 브라우저에서만 처리됩니다.",
   },
+  {
+    slug: "timestamp-converter",
+    name: "Timestamp Converter",
+    description: "Unix timestamp를 UTC와 한국 시간으로 변환합니다.",
+    privacyNote: "입력한 timestamp는 서버로 전송되지 않고 브라우저에서만 처리됩니다.",
+  },
 ] as const;
 
 export function getTool(slug: string): ToolDefinition | undefined {
   return tools.find((tool) => tool.slug === slug);
 }
-

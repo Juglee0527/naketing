@@ -94,7 +94,7 @@ naketing/
 ### 렌더링 경계
 
 - 페이지와 콘텐츠 조회는 기본적으로 Server Component에서 처리합니다.
-- JSON Formatter와 JWT Decoder만 입력 상태와 브라우저 API 때문에 Client Component입니다.
+- JSON Formatter, JWT Decoder, Timestamp Converter만 입력 상태와 브라우저 API 때문에 Client Component입니다.
 - Blog와 Tool 동적 경로는 `generateStaticParams`로 build 시 생성합니다.
 - 존재하지 않는 slug는 `notFound()` 계약을 사용합니다.
 

@@ -93,7 +93,7 @@ Home은 개인 개발자 사이트라는 점이 바로 보여야 합니다.
 
 ### Tools 공통 규칙
 
-- 현재 Tool은 JSON Formatter와 JWT Decoder입니다.
+- 현재 Tool은 JSON Formatter, JWT Decoder, Timestamp Converter입니다.
 - 입력값은 서버나 외부 API로 전송하지 않습니다.
 - 가능한 모든 처리는 브라우저 내부에서 수행합니다.
 - Tool 화면에는 브라우저 내부 처리 사실을 알립니다.
@@ -120,6 +120,16 @@ Home은 개인 개발자 사이트라는 점이 바로 보여야 합니다.
 - 잘못된 JWT 오류 안내
 
 JWT Decoder는 서명을 검증하지 않습니다. 인증 또는 보안 판단 도구가 아니라는 경고를 명확하게 유지합니다.
+
+### Timestamp Converter
+
+- Unix timestamp 입력
+- Seconds와 Milliseconds 단위 선택
+- UTC ISO 8601과 한국 시간(`Asia/Seoul`) 표시
+- 현재 시각 입력
+- Copy
+- Clear
+- 빈값, 정수가 아닌 값, 지원 범위를 벗어난 값의 오류 안내
 
 ### Projects
 
@@ -175,4 +185,3 @@ JWT Decoder는 서명을 검증하지 않습니다. 인증 또는 보안 판단 
 - Analytics, Search Console, AdSense 계정
 
 미확정 항목은 사용자 확인 없이 구현 완료 상태로 바꾸지 않습니다.
-

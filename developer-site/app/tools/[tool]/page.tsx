@@ -5,7 +5,8 @@ import { notFound } from "next/navigation";
 import { AdSlot } from "@/components/ad-slot";
 import { JsonFormatter } from "@/components/json-formatter";
 import { JwtDecoder } from "@/components/jwt-decoder";
-import { getTool, tools } from "@/lib/tools";
+import { TimestampConverter } from "@/components/timestamp-converter";
+import { getTool, tools, type ToolSlug } from "@/lib/tools";
 
 interface ToolPageProps {
   params: Promise<{ tool: string }>;
@@ -15,6 +16,17 @@ export const dynamicParams = false;
 
 export function generateStaticParams() {
   return tools.map((tool) => ({ tool: tool.slug }));
+}
+
+function renderTool(toolSlug: ToolSlug) {
+  switch (toolSlug) {
+    case "json-formatter":
+      return <JsonFormatter />;
+    case "jwt-decoder":
+      return <JwtDecoder />;
+    case "timestamp-converter":
+      return <TimestampConverter />;
+  }
 }
 
 export async function generateMetadata({ params }: ToolPageProps): Promise<Metadata> {
@@ -64,7 +76,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
         </aside>
       )}
 
-      <div className="mt-8">{tool.slug === "json-formatter" ? <JsonFormatter /> : <JwtDecoder />}</div>
+      <div className="mt-8">{renderTool(tool.slug)}</div>
       <AdSlot placement="tool-bottom" />
     </div>
   );
