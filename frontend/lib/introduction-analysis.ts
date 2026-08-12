@@ -1,12 +1,13 @@
 import {
-  calculateSpeechTime,
-  paceDefinitions,
+  assessSpeechLength,
+  type SpeechLengthAssessment,
+  type SpeechLengthStatus,
   type SpeechPace,
-  type SpeechTimeResult,
+  type SpeechTargetDuration,
 } from "./speech-time";
 
-export type TargetDuration = 30 | 60 | 180;
-export type LengthStatus = "short" | "appropriate" | "long";
+export type TargetDuration = SpeechTargetDuration;
+export type LengthStatus = SpeechLengthStatus;
 export type StructureCheckId = "identity" | "experience" | "outcome" | "closing";
 
 export interface PhraseFinding {
@@ -38,13 +39,8 @@ export interface IntroductionAction {
   description: string;
 }
 
-export interface IntroductionAnalysisResult extends SpeechTimeResult {
-  targetSeconds: TargetDuration;
-  toleranceSeconds: number;
-  minimumCharacters: number;
-  maximumCharacters: number;
+export interface IntroductionAnalysisResult extends SpeechLengthAssessment {
   lengthStatus: LengthStatus;
-  differenceSeconds: number;
   sentenceCount: number;
   averageSentenceCharacters: number;
   longSentences: SentenceFinding[];
@@ -172,23 +168,11 @@ export function analyzeIntroduction(
   pace: SpeechPace,
   targetSeconds: TargetDuration,
 ): IntroductionAnalysisResult | null {
-  const speechTime = calculateSpeechTime(script, pace);
-  if (!speechTime) {
+  const lengthAssessment = assessSpeechLength(script, pace, targetSeconds);
+  if (!lengthAssessment) {
     return null;
   }
 
-  const toleranceSeconds = Math.max(3, Math.round(targetSeconds * 0.1));
-  const minimumSeconds = targetSeconds - toleranceSeconds;
-  const maximumSeconds = targetSeconds + toleranceSeconds;
-  const charactersPerMinute = paceDefinitions[pace].charactersPerMinute;
-  const minimumCharacters = Math.round((minimumSeconds / 60) * charactersPerMinute);
-  const maximumCharacters = Math.round((maximumSeconds / 60) * charactersPerMinute);
-  const lengthStatus: LengthStatus =
-    speechTime.totalSeconds < minimumSeconds
-      ? "short"
-      : speechTime.totalSeconds > maximumSeconds
-        ? "long"
-        : "appropriate";
   const sentences = splitSentences(script);
   const sentenceFindings = sentences.map((text) => ({
     text,
@@ -196,13 +180,8 @@ export function analyzeIntroduction(
   }));
 
   return {
-    ...speechTime,
-    targetSeconds,
-    toleranceSeconds,
-    minimumCharacters,
-    maximumCharacters,
-    lengthStatus,
-    differenceSeconds: speechTime.totalSeconds - targetSeconds,
+    ...lengthAssessment,
+    lengthStatus: lengthAssessment.status,
     sentenceCount: sentences.length,
     averageSentenceCharacters:
       sentences.length === 0 ? 0 : Math.round(sentenceFindings.reduce((sum, sentence) => sum + sentence.characterCount, 0) / sentences.length),

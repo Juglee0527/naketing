@@ -3,87 +3,43 @@
 import { useState } from "react";
 
 import {
-  calculateSpeechTime,
+  assessSpeechLength,
   formatSpeechDuration,
   paceDefinitions,
+  type SpeechLengthStatus,
   type SpeechPace,
-  type SpeechTimeResult,
+  type SpeechTargetDuration,
 } from "@/lib/speech-time";
 
-type TargetDuration = "30" | "60" | "180";
-type LengthStatus = "short" | "appropriate" | "long";
-
-interface LengthCheckResult extends SpeechTimeResult {
-  status: LengthStatus;
-  targetSeconds: number;
-  toleranceSeconds: number;
-  minimumCharacters: number;
-  maximumCharacters: number;
-}
-
-const targetLabels: Record<TargetDuration, string> = {
-  "30": "30초 자기소개",
-  "60": "1분 자기소개",
-  "180": "3분 자기소개",
+const targetLabels: Record<SpeechTargetDuration, string> = {
+  30: "30초 자기소개",
+  60: "1분 자기소개",
+  180: "3분 자기소개",
 };
 
-const statusLabels: Record<LengthStatus, string> = {
+const statusLabels: Record<SpeechLengthStatus, string> = {
   short: "목표보다 짧습니다",
   appropriate: "적정 범위입니다",
   long: "목표보다 깁니다",
 };
 
-const statusColors: Record<LengthStatus, string> = {
+const statusColors: Record<SpeechLengthStatus, string> = {
   short: "text-amber-300",
   appropriate: "text-emerald-300",
   long: "text-red-300",
 };
 
-function checkIntroductionLength(
-  script: string,
-  pace: SpeechPace,
-  target: TargetDuration,
-): LengthCheckResult | null {
-  const speechTime = calculateSpeechTime(script, pace);
-  if (!speechTime) {
-    return null;
-  }
-
-  const targetSeconds = Number(target);
-  const toleranceSeconds = Math.max(3, Math.round(targetSeconds * 0.1));
-  const minimumSeconds = targetSeconds - toleranceSeconds;
-  const maximumSeconds = targetSeconds + toleranceSeconds;
-  const charactersPerMinute = paceDefinitions[pace].charactersPerMinute;
-  const minimumCharacters = Math.round((minimumSeconds / 60) * charactersPerMinute);
-  const maximumCharacters = Math.round((maximumSeconds / 60) * charactersPerMinute);
-  const status: LengthStatus =
-    speechTime.totalSeconds < minimumSeconds
-      ? "short"
-      : speechTime.totalSeconds > maximumSeconds
-        ? "long"
-        : "appropriate";
-
-  return {
-    ...speechTime,
-    status,
-    targetSeconds,
-    toleranceSeconds,
-    minimumCharacters,
-    maximumCharacters,
-  };
-}
-
 export function IntroductionLengthChecker() {
   const [script, setScript] = useState("");
-  const [target, setTarget] = useState<TargetDuration>("60");
+  const [target, setTarget] = useState<SpeechTargetDuration>(60);
   const [pace, setPace] = useState<SpeechPace>("normal");
-  const [result, setResult] = useState<LengthCheckResult | null>(null);
+  const [result, setResult] = useState<ReturnType<typeof assessSpeechLength>>(null);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
   function checkLength() {
     setMessage("");
-    const checkedResult = checkIntroductionLength(script, pace, target);
+    const checkedResult = assessSpeechLength(script, pace, target);
 
     if (!checkedResult) {
       setResult(null);
@@ -121,7 +77,7 @@ export function IntroductionLengthChecker() {
 
   function clearChecker() {
     setScript("");
-    setTarget("60");
+    setTarget(60);
     setPace("normal");
     setResult(null);
     setError("");
@@ -146,11 +102,11 @@ export function IntroductionLengthChecker() {
             className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
             value={target}
             onChange={(event) => {
-              setTarget(event.target.value as TargetDuration);
+              setTarget(Number(event.target.value) as SpeechTargetDuration);
               resetResult();
             }}
           >
-            {Object.entries(targetLabels).map(([value, label]) => (
+            {(Object.entries(targetLabels) as Array<[`${SpeechTargetDuration}`, string]>).map(([value, label]) => (
               <option value={value} key={value}>
                 {label}
               </option>

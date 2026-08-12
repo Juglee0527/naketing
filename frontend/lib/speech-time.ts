@@ -1,4 +1,6 @@
 export type SpeechPace = "slow" | "normal" | "fast";
+export type SpeechTargetDuration = 30 | 60 | 180;
+export type SpeechLengthStatus = "short" | "appropriate" | "long";
 
 export interface PaceDefinition {
   label: string;
@@ -9,6 +11,15 @@ export interface SpeechTimeResult {
   characterCount: number;
   wordCount: number;
   totalSeconds: number;
+}
+
+export interface SpeechLengthAssessment extends SpeechTimeResult {
+  status: SpeechLengthStatus;
+  targetSeconds: SpeechTargetDuration;
+  toleranceSeconds: number;
+  minimumCharacters: number;
+  maximumCharacters: number;
+  differenceSeconds: number;
 }
 
 export const paceDefinitions: Record<SpeechPace, PaceDefinition> = {
@@ -41,6 +52,40 @@ export function calculateSpeechTime(value: string, pace: SpeechPace): SpeechTime
     characterCount,
     wordCount: countSpeechWords(value),
     totalSeconds,
+  };
+}
+
+export function assessSpeechLength(
+  value: string,
+  pace: SpeechPace,
+  targetSeconds: SpeechTargetDuration,
+): SpeechLengthAssessment | null {
+  const speechTime = calculateSpeechTime(value, pace);
+  if (!speechTime) {
+    return null;
+  }
+
+  const toleranceSeconds = Math.max(3, Math.round(targetSeconds * 0.1));
+  const minimumSeconds = targetSeconds - toleranceSeconds;
+  const maximumSeconds = targetSeconds + toleranceSeconds;
+  const charactersPerMinute = paceDefinitions[pace].charactersPerMinute;
+  const minimumCharacters = Math.round((minimumSeconds / 60) * charactersPerMinute);
+  const maximumCharacters = Math.round((maximumSeconds / 60) * charactersPerMinute);
+  const status: SpeechLengthStatus =
+    speechTime.characterCount < minimumCharacters
+      ? "short"
+      : speechTime.characterCount > maximumCharacters
+        ? "long"
+        : "appropriate";
+
+  return {
+    ...speechTime,
+    status,
+    targetSeconds,
+    toleranceSeconds,
+    minimumCharacters,
+    maximumCharacters,
+    differenceSeconds: speechTime.totalSeconds - targetSeconds,
   };
 }
 
