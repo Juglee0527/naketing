@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { sharedOpenGraphImage } from "@/lib/site";
+
 export const metadata: Metadata = {
   title: "자기소개 점검 기준과 한계",
   description: "Naketing의 발화 시간, 표현, 문장과 자기소개 구조 점검 기준 및 결과의 한계를 설명합니다.",
@@ -9,6 +11,7 @@ export const metadata: Metadata = {
     title: "Naketing 자기소개 점검 기준과 한계",
     description: "발화 시간과 자기소개 원고를 어떤 규칙으로 점검하는지 확인합니다.",
     url: "/methodology",
+    images: [sharedOpenGraphImage],
   },
 };
 

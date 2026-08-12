@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 
 import { GuideContent } from "@/components/guide-content";
 import { formatGuideDate, getAllGuides, getGuideBySlug, getRelatedGuides } from "@/lib/guides";
-import { absoluteUrl, siteConfig } from "@/lib/site";
+import { absoluteUrl, sharedOpenGraphImage, siteConfig } from "@/lib/site";
 import { getRelatedToolForGuide } from "@/lib/tools";
 
 interface GuidePageProps {
@@ -39,6 +39,7 @@ export async function generateMetadata({ params }: GuidePageProps): Promise<Meta
       publishedTime: `${guide.date}T00:00:00+09:00`,
       tags: guide.tags,
       authors: [siteConfig.author.name],
+      images: [sharedOpenGraphImage],
     },
   };
 }
@@ -56,13 +57,30 @@ export default async function GuidePage({ params }: GuidePageProps) {
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Article",
-    headline: guide.title,
-    description: guide.description,
-    datePublished: guide.date,
-    author: { "@type": "Person", name: siteConfig.author.name },
-    publisher: { "@type": "Organization", name: siteConfig.name },
-    mainEntityOfPage: absoluteUrl(`/guides/${guide.slug}`),
+    "@graph": [
+      {
+        "@type": "Article",
+        headline: guide.title,
+        description: guide.description,
+        datePublished: guide.date,
+        author: { "@type": "Person", name: siteConfig.author.name },
+        publisher: { "@id": `${siteConfig.url}/#organization` },
+        mainEntityOfPage: absoluteUrl(`/guides/${guide.slug}`),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+          { "@type": "ListItem", position: 2, name: "가이드", item: absoluteUrl("/guides") },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: guide.title,
+            item: absoluteUrl(`/guides/${guide.slug}`),
+          },
+        ],
+      },
+    ],
   };
 
   return (

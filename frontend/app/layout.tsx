@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { getAdSensePublisherId } from "@/lib/adsense";
-import { siteConfig } from "@/lib/site";
+import { sharedOpenGraphImage, sharedTwitterImage, siteConfig } from "@/lib/site";
 
 import "./globals.css";
 
@@ -21,7 +21,39 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     title: siteConfig.title,
     description: siteConfig.description,
+    images: [sharedOpenGraphImage],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: [sharedTwitterImage],
+  },
+};
+
+const siteJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteConfig.url}/#website`,
+      name: siteConfig.name,
+      url: siteConfig.url,
+      description: siteConfig.description,
+      inLanguage: "ko-KR",
+      publisher: { "@id": `${siteConfig.url}/#organization` },
+    },
+    {
+      "@type": "Organization",
+      "@id": `${siteConfig.url}/#organization`,
+      name: siteConfig.name,
+      url: siteConfig.url,
+      founder: {
+        "@type": "Person",
+        name: siteConfig.author.name,
+      },
+    },
+  ],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -40,6 +72,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         )}
       </head>
       <body className="bg-zinc-950 text-white">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }} />
         <div className="flex min-h-screen flex-col">
           <header className="border-b border-zinc-800 bg-zinc-950/90">
             <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6">

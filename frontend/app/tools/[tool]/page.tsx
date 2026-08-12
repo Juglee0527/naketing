@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { IntroductionLengthChecker } from "@/components/introduction-length-checker";
 import { SpeechTimeCalculator } from "@/components/speech-time-calculator";
+import { sharedOpenGraphImage } from "@/lib/site";
 import { getTool, tools, type ToolSlug } from "@/lib/tools";
 
 interface ToolPageProps {
@@ -42,6 +43,7 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
       title: tool.name,
       description: tool.description,
       url: canonicalPath,
+      images: [sharedOpenGraphImage],
     },
   };
 }

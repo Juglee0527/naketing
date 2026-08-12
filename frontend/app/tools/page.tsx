@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { tools } from "@/lib/tools";
+import { sharedOpenGraphImage } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "무료 말하기 도구",
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
     title: "Naketing 무료 말하기 도구",
     description: "자기소개와 발표 원고를 브라우저에서 점검할 수 있는 무료 도구입니다.",
     url: "/tools",
+    images: [sharedOpenGraphImage],
   },
 };
 

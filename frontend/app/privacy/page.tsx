@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { sharedOpenGraphImage } from "@/lib/site";
+
 export const metadata: Metadata = {
   title: "개인정보 처리방침",
   description: "Naketing의 개인정보와 광고 관련 처리 기준을 안내합니다.",
@@ -9,6 +11,7 @@ export const metadata: Metadata = {
     title: "Naketing 개인정보 처리방침",
     description: "Naketing의 개인정보와 광고 관련 처리 기준을 안내합니다.",
     url: "/privacy",
+    images: [sharedOpenGraphImage],
   },
 };
 

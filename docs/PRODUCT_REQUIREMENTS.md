@@ -106,6 +106,7 @@ Tool 상세는 입력 UI만 제공하지 않고 사용 순서, 계산 기준, �
 ### Naketing SEO와 개인정보
 
 - 주요 페이지에 title, description, canonical URL과 Open Graph를 제공합니다.
+- 모든 주요 페이지는 공통 Open Graph 및 Twitter 공유 이미지를 제공하고 사이트에는 WebSite·Organization, Guide 상세에는 Article·BreadcrumbList 구조화 데이터를 제공합니다.
 - Guides와 Tools의 정적 경로를 sitemap에 포함하고 robots에서 sitemap 위치를 안내합니다.
 - canonical과 sitemap의 기본 공개 origin은 실제 운영 응답 기준인 `https://www.naketing.co.kr`입니다. 다른 공개 origin으로 build할 때만 `NEXT_PUBLIC_SITE_URL`로 override합니다.
 - Search Console 연결과 색인 상태는 외부 계정에서 실제 확인하기 전까지 완료로 표현하지 않습니다.

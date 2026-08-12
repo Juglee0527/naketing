@@ -11,6 +11,20 @@ export const siteConfig = {
   },
 } as const;
 
+export const sharedOpenGraphImage = {
+  url: "/opengraph-image",
+  width: 1200,
+  height: 630,
+  alt: "Naketing - 나를 설명하는 말을 직접 쓰고 점검하는 서비스",
+} as const;
+
+export const sharedTwitterImage = {
+  url: "/twitter-image",
+  width: 1200,
+  height: 630,
+  alt: sharedOpenGraphImage.alt,
+} as const;
+
 export function absoluteUrl(path: string): string {
   return new URL(path, `${siteConfig.url}/`).toString();
 }

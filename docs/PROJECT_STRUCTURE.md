@@ -71,6 +71,7 @@ Header의 주요 메뉴는 `/program`, `/guides`, `/tools` 3개입니다. `/meth
 
 - App Router를 사용합니다.
 - 현재 페이지는 build 시 정적으로 prerender됩니다.
+- root metadata 이미지 route가 Open Graph와 Twitter용 PNG를 생성합니다.
 - Guide 상세 경로는 `generateStaticParams`로 build 시 생성하며 정의되지 않은 slug는 404로 처리합니다.
 - Tool 상세 경로는 정적 Tool 정의와 `generateStaticParams`를 이용해 build 시 생성합니다.
 - `frontend/next.config.ts`에는 `output: "export"`가 없습니다.

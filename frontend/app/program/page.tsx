@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { IntroductionProgram } from "@/components/introduction-program";
+import { sharedOpenGraphImage } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "자기소개 점검 프로그램",
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
     title: "Naketing 자기소개 점검 프로그램",
     description: "상황과 목표 시간을 정하고 자기소개 원고의 분량과 구조를 브라우저에서 직접 점검합니다.",
     url: "/program",
+    images: [sharedOpenGraphImage],
   },
 };
 

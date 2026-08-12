@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { formatGuideDate, getAllGuides } from "@/lib/guides";
+import { sharedOpenGraphImage } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "말하기 가이드",
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
     title: "Naketing 말하기 가이드",
     description: "자기소개, 면접, 발표와 퍼스널 브랜딩을 더 명확하게 전달하는 방법을 정리합니다.",
     url: "/guides",
+    images: [sharedOpenGraphImage],
   },
 };
 
