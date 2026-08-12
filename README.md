@@ -31,9 +31,17 @@ npm.cmd run dev -- --port 3001
 
 ## 검증
 
-변경한 앱 디렉터리에서 실행합니다.
+Naketing 서비스는 테스트, lint, production build와 심사 전 정적 계약을 한 번에 확인합니다.
 
 ```powershell
+cd frontend
+npm.cmd run verify:review
+```
+
+Developer Site는 별도 앱 디렉터리에서 검증합니다.
+
+```powershell
+cd developer-site
 npm.cmd run lint
 npm.cmd run build
 ```

@@ -108,11 +108,32 @@ Tool은 다음 케이스를 검증합니다.
 - Clear 이후 상태 초기화
 - 모바일 레이아웃
 
-## Naketing 광고 수익화 구현 계획
+## 자기소개 점검 프로그램 변경
 
-이 절은 `frontend` 수익화 작업의 현재 구현 기준과 남은 순서입니다. 제품 범위와 광고 정책은 `PRODUCT_REQUIREMENTS.md`의 Naketing 섹션을 우선합니다.
+`frontend`의 자기소개 프로그램은 화면 상태와 규칙 계산을 분리합니다.
 
-### 1. 수익화 기반
+1. 목적·원고·결과 단계와 포커스 이동은 `components/introduction-program.tsx`에서 관리합니다.
+2. 결과 표시는 `components/introduction-program-result.tsx`에서 담당합니다.
+3. 글자 수와 발화 시간은 `lib/speech-time.ts`, 원고 분석은 `lib/introduction-analysis.ts`에서 계산합니다.
+4. 질문 답변 결합과 수정 전후 비교는 각각 `lib/introduction-draft.ts`, `lib/introduction-comparison.ts`에서 처리합니다.
+5. 계산 규칙을 바꾸면 관련 `*.test.ts`와 `/methodology`의 공개 설명을 같은 작업에서 갱신합니다.
+
+변경 시 정상 원고 외에 다음 경계를 확인합니다.
+
+- 빈 원고와 공백만 있는 원고
+- 목표 분량 최소·최대 글자 수 경계
+- 후보 표현이 긴 단어의 일부로 들어간 경우
+- 한국어 조사가 붙은 반복 단어
+- 문장 부호와 줄바꿈이 섞인 원고
+- 질문 답변이 없거나 기존 원고가 이미 있는 작성 도우미
+- 첫 점검 전·후와 처음부터 다시 시작한 비교 상태
+- 키보드 단계 이동, 오류 입력 포커스와 `aria-describedby` 연결
+
+## Naketing 운영 및 광고 수익화
+
+이 절은 `frontend` 수익화 기반의 현재 구현과 외부 운영에서 남은 순서를 구분합니다. 제품 범위와 광고 정책은 `PRODUCT_REQUIREMENTS.md`의 Naketing 섹션을 우선합니다.
+
+### 1. 구현된 수익화 기반
 
 1. 홈과 소개 화면의 AI 관련 표현이 실제 구현 상태와 일치하는지 확인합니다.
 2. 개인정보 처리방침과 문의 route를 추가하고 Footer에서 접근 가능하게 합니다.
@@ -120,7 +141,7 @@ Tool은 다음 케이스를 검증합니다.
 4. `frontend`용 sitemap과 robots를 생성합니다.
 5. Home과 프로그램 소개는 초기 광고 제외 대상으로 유지합니다. 개인정보 처리방침, 문의와 404도 광고를 게재하지 않습니다.
 
-### 2. Guides
+### 2. 구현된 Guides
 
 `frontend/content/guides/*.md`를 build 시 읽어 `/guides`와 `/guides/[slug]`를 생성합니다.
 
@@ -132,7 +153,7 @@ Tool은 다음 케이스를 검증합니다.
 
 Guide를 추가할 때는 `title`, `description`, 실제 `YYYY-MM-DD` 날짜, 한 개 이상의 `tags`, kebab-case `slug`를 frontmatter에 입력합니다. 빈 본문, 잘못된 날짜와 slug, 중복 slug는 build 오류로 처리합니다.
 
-### 3. Naketing 무료 Tools
+### 3. 구현된 Naketing 무료 Tools
 
 - Tool 목록과 상세 route는 `frontend` 안에서 관리합니다.
 - 현재 `/tools/speech-time-calculator`와 `/tools/introduction-length-checker`가 구현돼 있습니다.
@@ -170,7 +191,7 @@ npm.cmd run verify:review
 - 대표 Guide에 Article JSON-LD가 포함됩니다.
 - 다른 공개 origin에서 build할 때만 `NEXT_PUBLIC_SITE_URL`을 설정합니다.
 
-### 5. 승인 후 광고 적용
+### 5. 승인 후 남은 광고 적용
 
 1. Guide 본문 하단과 Tool 결과 하단에 수동 광고 단위를 적용합니다.
 2. 실제 publisher ID로 `frontend/public/ads.txt`를 생성합니다.
@@ -200,21 +221,21 @@ NEXT_PUBLIC_GOOGLE_ADSENSE_PUBLISHER_ID=실제 AdSense publisher ID
 
 ## 검증
 
-`frontend`는 자기소개 점검과 콘텐츠 연결 규칙을 Vitest 단위 테스트로 검증합니다. `developer-site`에는 자동 테스트 스크립트가 없습니다. 코드 변경 시 영향받은 앱의 테스트가 있으면 먼저 실행하고 lint와 production build를 실행합니다.
+`frontend`는 자기소개 점검과 콘텐츠 연결 규칙을 Vitest 단위 테스트로 검증합니다. `developer-site`에는 자동 테스트 스크립트가 없습니다. `frontend`의 일반 검증은 개별 명령을 반복하는 대신 심사 전 정적 계약까지 포함한 통합 명령을 사용합니다.
 
 ```powershell
-npm.cmd run lint
-npm.cmd run build
+cd frontend
+npm.cmd run verify:review
 ```
 
 ### `frontend` 변경
 
 ```powershell
 cd frontend
-npm.cmd run test
-npm.cmd run lint
-npm.cmd run build
+npm.cmd run verify:review
 ```
+
+실패 원인을 좁힐 때만 `npm.cmd run test`, `npm.cmd run lint`, `npm.cmd run build`를 개별 실행합니다.
 
 ### `developer-site` 변경
 

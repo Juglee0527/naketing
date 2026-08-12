@@ -9,9 +9,9 @@ naketing/
 ├─ .github/workflows/       # GitHub Actions CI
 ├─ frontend/                 # 기존 naketing.co.kr 서비스
 │  ├─ app/                   # App Router 페이지와 공통 layout
-│  ├─ components/            # Guide 등 Naketing 화면 컴포넌트
+│  ├─ components/            # 자기소개 프로그램, Guide와 Tool 화면 컴포넌트
 │  ├─ content/guides/         # 빌드 입력용 말하기 Guide Markdown
-│  ├─ lib/                   # Guide 파싱과 Naketing 정적 데이터
+│  ├─ lib/                   # 자기소개 규칙, Guide 파싱, Tool·사이트 정적 데이터
 │  ├─ public/
 │  ├─ scripts/                # 심사 전 자동 검증 스크립트
 │  ├─ package.json
@@ -52,7 +52,15 @@ naketing/
 
 ### 책임
 
-기존 Naketing 서비스의 화면을 제공합니다.
+`naketing.co.kr`의 말하기·자기소개 서비스를 제공합니다.
+
+- 브라우저 기반 3단계 자기소개 작성·점검 프로그램
+- 점검 기준과 한계를 공개하는 Methodology
+- Markdown 기반 원본 Guide 10개
+- 브라우저 기반 무료 Tool 2개
+- 개인정보 처리방침과 문의 경로
+- canonical, sitemap, robots, Open Graph·Twitter 이미지와 구조화 데이터
+- 환경변수 기반 AdSense 사이트 심사 스크립트 경계
 
 ### 현재 route
 
@@ -67,6 +75,21 @@ naketing/
 - `/tools/[tool]`
 
 Header의 주요 메뉴는 `/program`, `/guides`, `/tools` 3개입니다. `/methodology`, `/privacy`, `/contact`는 Footer의 참고 및 운영 링크로 연결합니다.
+
+### 자기소개 점검 데이터 흐름
+
+`/program`의 화면 상태와 입력 이벤트는 `components/introduction-program.tsx`에서 관리합니다. 계산과 판정은 화면에서 분리된 순수 함수로 처리합니다.
+
+| 계층 | 책임 |
+| --- | --- |
+| `components/introduction-program.tsx` | 목적 선택, 질문별 작성 도우미, 단계 이동, 첫 점검 기준선과 포커스 관리 |
+| `components/introduction-program-result.tsx` | 점검 결과, 근거 문장, 수정 순서, 첫 결과 대비 변화와 복사 UI |
+| `lib/speech-time.ts` | 글자 수, 단어 수, 발화 시간과 목표 분량 판정 |
+| `lib/introduction-draft.ts` | 사용자가 답한 문장을 순서대로 결합하고 기존 원고 덮어쓰기 방지 |
+| `lib/introduction-analysis.ts` | 후보 표현, 반복 단어, 긴 문장과 네 가지 구조 단서 점검 |
+| `lib/introduction-comparison.ts` | 첫 점검과 현재 결과의 수치·구조 변화 계산 |
+
+원고, 질문 답변과 첫 점검 기준선은 React 상태와 브라우저 메모리에만 존재합니다. 서버, 외부 API, local storage와 DB로 전송하거나 저장하지 않습니다. 페이지를 새로 열거나 프로그램을 처음부터 다시 시작하면 비교 기준선도 사라집니다.
 
 ### 렌더링과 빌드
 
@@ -100,7 +123,7 @@ Header의 주요 메뉴는 `/program`, `/guides`, `/tools` 3개입니다. `/meth
 - 검색 노출을 위한 metadata, sitemap, robots
 - 광고 없는 개발자 포트폴리오 운영
 
-현재 코드의 `AdSlot`은 광고 요청을 만들지 않는 빈 placeholder입니다. 광고 수익화 기능은 Developer Site가 아니라 `frontend`에 구현할 계획이며, 아직 현재 구조에는 추가되지 않았습니다.
+현재 코드의 `AdSlot`은 광고 요청을 만들지 않는 빈 placeholder입니다. 광고 수익화 대상은 Developer Site가 아니라 `frontend`이며, `frontend`에는 실제 publisher ID가 있을 때만 출력되는 사이트 심사 스크립트 경계가 구현돼 있습니다. 승인 후 광고 단위는 아직 구현하지 않았습니다.
 
 ### 현재 route
 
